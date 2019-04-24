@@ -1,20 +1,29 @@
-
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
-
+const Artist = require('./artist');
 
 class UNQfy {
 
-  // artistData: objeto JS con los datos necesarios para crear un artista
-  //   artistData.name (string)
-  //   artistData.country (string)
-  // retorna: el nuevo artista creado
+  constructor(){
+    this.artists = [];
+  }
+  
+  //// NECESITA ID GENERATOR IMPLEMENTADO - USO ID PROVISORIO //////
   addArtist(artistData) {
-  /* Crea un artista y lo agrega a unqfy.
-  El objeto artista creado debe soportar (al menos):
-    - una propiedad name (string)
-    - una propiedad country (string)
-  */
+    const id = 1; /// Esta línea debería ser => const id = idGenerator.obtainArtistId();   
+    const myArtist = new Artist(artistData.name, artistData.country);
+    if(!this.artistAlreadyExists(artistData.name)){
+      this.artists[id] = myArtist;
+      console.log(`Artist ${artistData.name} created succesfully!`);
+    } else {
+      ////// AQUI LANZAR EXCEPCION SI EL ARTISTA EXISTE!! ///////
+      console.log('El artista ya existe!'); //Reemplazar cuando esté implementada la
+    }
+  }
+
+  artistAlreadyExists(artistName){
+    const result = this.artists.find(artist => artist.name === artistName);
+    return result !== undefined;
   }
 
 

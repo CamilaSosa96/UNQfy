@@ -1,5 +1,3 @@
-
-
 const fs = require('fs'); // necesitado para guardar/cargar unqfy
 const unqmod = require('./unqfy'); // importamos el modulo unqfy
 
@@ -47,8 +45,20 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 */
 
 function main() {
-  console.log('arguments: ');
-  process.argv.forEach(argument => console.log(argument));
+  const params = process.argv.slice(2);
+  if(params[0] === 'addArtist'){
+    addArtist(params[1], params[2]);
+  }
+  //Camila: colocar aquí más ifs para cada comando a implementar.
+}
+
+//Camila: colocar apartir de aquí las funciones que van a llamar a las funciones de UNQfy.
+function addArtist(name,country){
+  const unqfy = getUNQfy();
+  unqfy.addArtist({
+    name: name,
+    country: country
+  });
 }
 
 main();
