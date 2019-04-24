@@ -77,9 +77,9 @@ class UNQfy {
 
   }
 
-  // artistName: nombre de artista(string)
-  // retorna: los tracks interpredatos por el artista con nombre artistName
-  getTracksMatchingArtist(artistName) {
+  // artistId: id de artista
+  // retorna: los tracks interpretados por el artista con id artistId
+  getTracksMatchingArtist(artistId) {
 
   }
 
