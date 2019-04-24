@@ -6,6 +6,7 @@ class UNQfy {
 
   constructor(){
     this.artists = [];
+    this.playlists = [];
   }
   
   //// NECESITA ID GENERATOR IMPLEMENTADO - USO ID PROVISORIO //////
@@ -17,7 +18,7 @@ class UNQfy {
       console.log(`Artist ${artistData.name} created succesfully!`);
     } else {
       ////// AQUI LANZAR EXCEPCION SI EL ARTISTA EXISTE!! ///////
-      console.log('El artista ya existe!'); //Reemplazar cuando esté implementada la
+      console.log('El artista ya existe!'); //Reemplazar cuando esté implementada la excepción!
     }
   }
 
@@ -67,7 +68,7 @@ class UNQfy {
   }
 
   getPlaylistById(id) {
-
+    return this.playlists[id];
   }
 
   // genres: array de generos(strings)

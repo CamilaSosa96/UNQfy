@@ -49,10 +49,10 @@ function main() {
   if(params[0] === 'addArtist'){
     addArtist(params[1], params[2]);
   }
-  //Camila: colocar aquí más ifs para cada comando a implementar.
+  // COLOCAR AQUÍ MÁS IFS POR CADA COMANDO A IMPLEMENTAR
 }
 
-//Camila: colocar apartir de aquí las funciones que van a llamar a las funciones de UNQfy.
+// COLOCAR A PARTIR DE AQUÍ LAS FUNCIONES QUE VAN A LLAMAR A LOS MÉTODOS DE UNQFY
 function addArtist(name,country){
   const unqfy = getUNQfy();
   unqfy.addArtist({
