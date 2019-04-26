@@ -5,6 +5,14 @@
         this.albums = [];
     }
     
+    printInfo(){
+        return ( 
+            `--------- Artist ---------
+            Name:    ${this.name} 
+            Country: ${this.country}
+            Albums:  ${this.albums.toArray}`
+        );
+    }
  }
 
  module.exports = Artist;

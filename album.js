@@ -6,6 +6,15 @@ class Album{
         this.year = _year;
         this.tracks = [];
     }
+
+    printInfo(){
+        return ( 
+            `--------- Album ---------
+            Name:   ${this.name} 
+            Year:   ${this.year}
+            Tracks: ${this.tracks.toArray}`
+        );
+    }
 }
 
 module.exports = Album;
