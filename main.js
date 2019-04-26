@@ -49,6 +49,9 @@ function main() {
   if(params[0] === 'addArtist'){
     addArtist(params[1], params[2]);
   }
+  if(params[0] === 'getTracksMatchingArtist'){
+    getTracksMatchingArtist(params[1]);
+  }
   // COLOCAR AQUÍ MÁS IFS POR CADA COMANDO A IMPLEMENTAR
 }
 
@@ -60,6 +63,14 @@ function addArtist(name,country){
     country: country
   });
   saveUNQfy(unqfy);
+}
+
+function getTracksMatchingArtist(artistId){
+  const unqfy = getUNQfy();
+  const tracks = unqfy.getTracksMatchingArtist(artistId);
+  for (const track in tracks){
+    console.log(track.printInfo());
+  } 
 }
 
 main();
