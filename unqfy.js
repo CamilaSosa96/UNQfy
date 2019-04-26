@@ -71,7 +71,14 @@ class UNQfy {
   }
 
   getTrackById(id) {
-
+    for(const artist in this.artists){
+      for(const album in artist.albums){
+        const myTrack = album.tracks[id];
+        if(myTrack !== undefined){
+          return myTrack;
+        }
+      }
+    }
   }
 
   getPlaylistById(id) {
