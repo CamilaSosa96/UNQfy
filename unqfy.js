@@ -13,13 +13,14 @@ class UNQfy {
   
   addArtist(artistData) {  
     const myArtist = new Artist(artistData.name, artistData.country);
-    if(!this.artistAlreadyExists(artistData.name)){
-      const id = this.idGenerator.obtainArtistId(); 
-      this.artists[id] = myArtist;
-      console.log(`Artist ${artistData.name} created succesfully!`);
-    } else {
-      ////// AQUI LANZAR EXCEPCION SI EL ARTISTA EXISTE!! ///////
-      console.log('El artista ya existe!'); //Reemplazar cuando esté implementada la excepción!
+    try{
+      if(!this.artistAlreadyExists(artistData.name)){
+        const id = this.idGenerator.obtainArtistId(); 
+        this.artists[id] = myArtist;
+        console.log(`Artist ${artistData.name} created succesfully!`);
+      }
+    } catch (exception){ 
+      console.log('Invalid artist: ' + exception.message);
     }
   }
 
@@ -27,7 +28,7 @@ class UNQfy {
     for (let i = 0; i< this.artists.length; i++){
       const myArtist = this.artists[i];
       if((myArtist !== undefined) && (this.artists[i].name === artistName)){
-        return true;
+        throw new Error(`Artist ${artistName} already exists!`);
       }
     }
     return false;
