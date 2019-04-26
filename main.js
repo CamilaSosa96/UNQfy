@@ -59,6 +59,7 @@ function addArtist(name,country){
     name: name,
     country: country
   });
+  saveUNQfy(unqfy);
 }
 
 main();

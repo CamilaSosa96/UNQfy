@@ -1,19 +1,20 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 const Artist = require('./artist');
+const idGenerator = require('./idGenerator');
 
 class UNQfy {
 
   constructor(){
     this.artists = [];
     this.playlists = [];
+    this.idGenerator = new idGenerator();
   }
   
-  //// NECESITA ID GENERATOR IMPLEMENTADO - USO ID PROVISORIO //////
-  addArtist(artistData) {
-    const id = 1; /// Esta línea debería ser => const id = idGenerator.obtainArtistId();   
+  addArtist(artistData) {  
     const myArtist = new Artist(artistData.name, artistData.country);
     if(!this.artistAlreadyExists(artistData.name)){
+      const id = this.idGenerator.obtainArtistId(); 
       this.artists[id] = myArtist;
       console.log(`Artist ${artistData.name} created succesfully!`);
     } else {
@@ -23,8 +24,13 @@ class UNQfy {
   }
 
   artistAlreadyExists(artistName){
-    const result = this.artists.find(artist => artist.name === artistName);
-    return result !== undefined;
+    for (let i = 0; i< this.artists.length; i++){
+      const myArtist = this.artists[i];
+      if((myArtist !== undefined) && (this.artists[i].name === artistName)){
+        return true;
+      }
+    }
+    return false;
   }
 
 
@@ -111,7 +117,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy];
+    const classes = [UNQfy, Artist, idGenerator];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }
