@@ -8,13 +8,22 @@ class Album{
     }
 
     printInfo(){
-        return ( 
-            `--------- Album ---------
-            Name:   ${this.name} 
-            Year:   ${this.year}
-            Tracks: ${this.tracks.toArray}`
+        return (`--------- Album ---------
+        Name:   ${this.name} 
+        Year:   ${this.year}
+        Tracks: ${this.printTracksInfo()}
+        -------------------------- 
+        `
         );
     }
+
+    printTracksInfo(){
+        if(this.tracks.toArray === undefined){
+            return 'No available';
+        }
+        return this.tracks.toArray;
+    }
+    
 }
 
 module.exports = Album;

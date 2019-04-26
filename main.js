@@ -52,6 +52,9 @@ function main() {
   if(params[0] === 'getTracksMatchingArtist'){
     getTracksMatchingArtist(params[1]);
   }
+  if(params[0] === 'search'){
+    search(params[1]);
+  }
   // COLOCAR AQUÍ MÁS IFS POR CADA COMANDO A IMPLEMENTAR
 }
 
@@ -71,6 +74,11 @@ function getTracksMatchingArtist(artistId){
   for (const track in tracks){
     console.log(track.printInfo());
   } 
+}
+
+function search(string){
+  const unqfy = getUNQfy();
+  unqfy.searchEntity(string);
 }
 
 main();

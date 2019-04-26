@@ -8,11 +8,12 @@ class Track{
     }
 
     printInfo(){
-        return ( 
-            `--------- Track ---------
-            Name:     ${this.name} 
-            Duration: ${this.duration} seconds
-            Genres:   ${this.genres.toArray}`
+        return (`--------- Track ---------
+        Name:     ${this.name} 
+        Duration: ${this.duration} seconds
+        Genres:   ${this.genres.toArray}
+        -------------------------- 
+        `
         );
     }
 }

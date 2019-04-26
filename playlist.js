@@ -9,12 +9,13 @@ class Playlist{
     }
 
     printInfo(){
-        return ( 
-            `--------- PlayList ---------
-            Name:     ${this.name} 
-            Genres:   ${this.duration}
-            Tracks:   ${this.tracks.toArray}
-            Duration: ${this.maxDuration}`
+        return (`--------- PlayList ---------
+        Name:     ${this.name} 
+        Genres:   ${this.duration}
+        Tracks:   ${this.tracks.toArray}
+        Duration: ${this.maxDuration}
+        -------------------------- 
+        `
         );
     }
 }
