@@ -94,8 +94,11 @@ class UNQfy {
   // artistId: id de artista
   // retorna: los tracks interpretados por el artista con id artistId
   getTracksMatchingArtist(artistId) {
-
-  }
+    let tracks = [];
+      for (const album in this.artists[artistId].albums){
+        tracks = tracks + album.tracks;
+      }
+    }
 
 
   // name: nombre de la playlist
