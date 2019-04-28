@@ -21,6 +21,10 @@
         }
         return this.albums.toArray;
     }
+
+    addAlbum(album,albumId){
+        this.albums[albumId].push(album);
+    }
  }
 
  module.exports = Artist;
