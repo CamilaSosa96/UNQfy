@@ -1,6 +1,7 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 const Artist = require('./artist');
+const Album = require('./album');
 const IdGenerator = require('./idGenerator');
 const IdIterator = require('./idIterator');
 
@@ -19,6 +20,7 @@ class UNQfy {
         const id = this.idGenerator.obtainId('artist'); 
         this.artists[id] = myArtist;
         console.log(`Artist ${artistData.name} created succesfully!`);
+        return myArtist;
       }
     } catch (exception){ 
       console.log('Invalid artist: ' + exception.message);
@@ -46,7 +48,20 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number)
   */
+ const myAlbum = new Album(albumData.name, albumData.year);
+ const result = this.getArtistById(artistId);
+    try{
+      if(result != null){
+        const albumId = this.idGenerator.obtainId('album'); 
+        this.artists[artistId].addAlbum(album,albumId);
+        return myAlbum;
+        console.log(`Album ${albumData.name} added to Artist with id ${artistId} succesfully!`);
+      }
+    } catch (exception){ 
+      console.log('Invalid artist id: ' + exception.message);
+    }
   }
+  
 
 
   // trackData: objeto JS con los datos necesarios para crear un track
@@ -64,6 +79,14 @@ class UNQfy {
   }
 
   getArtistById(id) {
+    const artist = this.artists[id];
+    
+    if((artist !== undefined)){
+          return artist;
+    }
+    else{
+    throw new Error(`Artist with id ${id} doesnt exist!`);
+    }
 
   }
 
