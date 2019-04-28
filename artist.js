@@ -4,6 +4,15 @@
         this.country = _country;
         this.albums = {};
     }
+
+    getTracksMatchingGenres(genres) {
+        let matches = [];
+        for (const albumId in this.albums) {
+            const album = this.albums[albumId];
+            matches = matches.concat(album.getTracksMatchingGenres(genres));
+        }
+        return matches;
+    }
     
     printInfo(){
         return (`--------- Artist --------- 

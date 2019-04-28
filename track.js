@@ -7,6 +7,16 @@ class Track{
         this.genres = _genres;
     }
 
+    matchesGenres(searchGenres) {
+        for (let i = 0; i < searchGenres.length(); i++) {
+            const searchGenre = searchGenres[i];
+            if (this.genres.indexOf(searchGenre) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     printInfo(){
         return (`--------- Track ---------
         Name:     ${this.name} 

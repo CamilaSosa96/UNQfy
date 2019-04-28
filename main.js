@@ -58,7 +58,9 @@ function main() {
   if(params[0] === 'addTrack'){
     addTrack(params[1], params[2], params[3], params[4]);
   }
-
+  if(params[0] === 'getTracksMatchingGenres'){
+    getTracksMatchingGenres(params[1]);
+  }  
   // COLOCAR AQUÍ MÁS IFS POR CADA COMANDO A IMPLEMENTAR
 }
 
@@ -85,15 +87,25 @@ function search(string){
   unqfy.searchEntity(string);
 }
 
-function addTrack(albumId, name, duration, genres){
+function addTrack(albumId, name, duration, genresString){
   const unqfy = getUNQfy();
   const trackData = {
     name: name,
     duration: duration,
-    genres: genres,
+    genres: parseGenresFromString(genresString),
   };
   unqfy.addTrack(albumId, trackData);
   saveUNQfy(unqfy);
+}
+
+function getTracksMatchingGenres(genresString) {
+  const unqfy = getUNQfy();
+  const matches = unqfy.getTracksMatchingGenres(parseGenresFromString(genresString));
+  console.log('Results:', matches);
+}
+
+function parseGenresFromString(genresString) {
+  return genresString.split(' ');
 }
 
 main();

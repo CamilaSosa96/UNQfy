@@ -15,6 +15,17 @@ class Album{
         this.tracks[id] = newTrack;
     }
 
+    getTracksMatchingGenres(genres) {
+        let matches = [];
+        for (const trackId in this.tracks) {
+            const track = this.tracks[trackId];
+            if (track.matchesGenres(genres)) {
+                matches.push(track);
+            }
+        }
+        return matches;
+    }
+
     printInfo(){
         return (`--------- Album ---------
         Name:   ${this.name} 
