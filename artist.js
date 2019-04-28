@@ -2,7 +2,7 @@
     constructor(_name, _country = 'No available'){
         this.name = _name;
         this.country = _country;
-        this.albums = [];
+        this.albums = {};
     }
     
     printInfo(){

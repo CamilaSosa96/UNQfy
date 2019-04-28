@@ -4,12 +4,13 @@ const Artist = require('./artist');
 const Album = require('./album');
 const IdGenerator = require('./idGenerator');
 const IdIterator = require('./idIterator');
+const Track = require('./track');
 
 class UNQfy {
 
   constructor(){
-    this.artists = [];
-    this.playlists = [];
+    this.artists = {};
+    this.playlists = {};
     this.idGenerator = new IdGenerator(['artist', 'album', 'track', 'playlist']);
   }
   
@@ -63,19 +64,17 @@ class UNQfy {
   }
   
 
-
-  // trackData: objeto JS con los datos necesarios para crear un track
-  //   trackData.name (string)
-  //   trackData.duration (number)
-  //   trackData.genres (lista de strings)
-  // retorna: el nuevo track creado
   addTrack(albumId, trackData) {
-  /* Crea un track y lo agrega al album con id albumId.
-  El objeto track creado debe tener (al menos):
-      - una propiedad name (string),
-      - una propiedad duration (number),
-      - una propiedad genres (lista de strings)
-  */
+    const myTrack = new Track(trackData.name, trackData.duration, trackData.genres);
+    try{
+      const myAlbum = this.getAlbumById(albumId)
+      const id = this.idGenerator.obtainId('track'); 
+      myAlbum.addTrack(id, myTrack)
+      console.log(` ${trackData.name} created succesfully!`);
+      return myTrack;
+    } catch (exception){ 
+      console.log('Invalid track: ' + exception.message);
+    }
   }
 
   getArtistById(id) {
@@ -91,18 +90,28 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-
+    for (const artistId in this.artists) {
+      const artist = this.artists[artistId];
+      const myAlbum = artist.albums[id];
+      if(myAlbum !== undefined){
+        return myAlbum;
+      }
+    }
+    throw Error(`El album con Id ${id} no existe`);
   }
 
   getTrackById(id) {
-    for(const artist in this.artists){
-      for(const album in artist.albums){
+    for (const artistId in this.artists) {
+      const artist = this.artists[artistId];
+      for(const albumId in artist.albums){
+        const album = artists.albums[albumId];
         const myTrack = album.tracks[id];
         if(myTrack !== undefined){
           return myTrack;
         }
       }
     }
+    throw Error(`El track con Id ${id} no existe`);
   }
 
   getPlaylistById(id) {
