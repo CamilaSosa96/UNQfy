@@ -55,6 +55,10 @@ function main() {
   if(params[0] === 'search'){
     search(params[1]);
   }
+  if(params[0] === 'addTrack'){
+    addTrack(params[1], params[2], params[3], params[4]);
+  }
+
   // COLOCAR AQUÍ MÁS IFS POR CADA COMANDO A IMPLEMENTAR
 }
 
@@ -79,6 +83,17 @@ function getTracksMatchingArtist(artistId){
 function search(string){
   const unqfy = getUNQfy();
   unqfy.searchEntity(string);
+}
+
+function addTrack(albumId, name, duration, genres){
+  const unqfy = getUNQfy();
+  const trackData = {
+    name: name,
+    duration: duration,
+    genres: genres,
+  };
+  unqfy.addTrack(albumId, trackData);
+  saveUNQfy(unqfy);
 }
 
 main();
