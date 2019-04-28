@@ -1,15 +1,19 @@
-class idGenerator {
+const IdIterator = require('./idIterator');
 
-    constructor(idArtist = 1, idAlbum = 1, idTrack = 1){
-        this.idArtist = idArtist;
-        this.idAlbum = idAlbum;
-        this.idTrack = idTrack;
+class IdGenerator {
+
+    constructor(entities = []) {
+        const map = {}
+        entities.forEach(function(entity) {
+            map[entity] = new IdIterator()
+        });
+        this.entities = map;
     }
 
-    obtainArtistId(){
-        this.idArtist += 1;
-        return this.idArtist - 1;
+    obtainId(entity) {
+        if (! (entity in this.entities)) throw Error(`No existe la entidad "${entity}"`);
+        return this.entities[entity].next();
     }
 }
 
-module.exports = idGenerator;
+module.exports = IdGenerator;
