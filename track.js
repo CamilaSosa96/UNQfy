@@ -10,7 +10,7 @@ class Track{
     matchesGenres(searchGenres) {
         for (let i = 0; i < searchGenres.length; i++) {
             const searchGenre = searchGenres[i];
-            if (this.genres.indexOf(searchGenre) != -1) {
+            if (this.genres.indexOf(searchGenre) !== -1) {
                 return true;
             }
         }
@@ -21,9 +21,20 @@ class Track{
         return (`--------- Track ----------
     Name:     ${this.name} 
     Duration: ${this.duration} seconds
-    Genres:   ${this.genres.toArray}
+    Genres:   ${this.printGenresInfo()}
     -------------------------- 
     `);
+    }
+
+    printGenresInfo(){
+        let genresInfo = '';
+        for(const genre in this.genres){
+            genresInfo = genresInfo + '[' + this.genres[genre] + '] ';
+        }
+        if(genresInfo === ''){
+            return 'No genres available';
+        }
+        return genresInfo;
     }
 }
 

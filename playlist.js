@@ -12,10 +12,19 @@ class Playlist{
         return (`--------- PlayList ---------
     Name:     ${this.name} 
     Genres:   ${this.genresToInclude}
-    Tracks:   ${this.tracks.toArray}
+    Tracks:   ${this.printTracksInfo()}
     Duration: ${this.duration}
     -------------------------- 
     `);
+    }
+
+    printTracksInfo(){
+        let tracksInfo = '';
+        for(const track in this.tracks){
+            const myTrackName = this.tracks[track].name;
+            tracksInfo = tracksInfo + '[' + myTrackName + '] ';
+        }
+        return tracksInfo;
     }
 }
 

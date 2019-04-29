@@ -108,8 +108,6 @@ class UNQfy {
     return this.playlists[id];
   }
 
-  // genres: array de generos(strings)
-  // retorna: los tracks que contenga alguno de los generos en el parametro genres
   getTracksMatchingGenres(genres) {
     let matches = [];
     for (const artistId in this.artists) {
@@ -119,8 +117,6 @@ class UNQfy {
     return matches;
   }
 
-  // artistId: id de artista
-  // retorna: los tracks interpretados por el artista con id artistId
   getTracksMatchingArtist(artistId) {
     let tracks = [];
       for (const album in this.artists[artistId].albums){
@@ -177,17 +173,7 @@ class UNQfy {
       return printedResults;
     }
 
-  // name: nombre de la playlist
-  // genresToInclude: array de generos
-  // maxDuration: duración en segundos
-  // retorna: la nueva playlist creada
   createPlaylist(name, genresToInclude, maxDuration) {
-  /*** Crea una playlist y la agrega a unqfy. ***
-    El objeto playlist creado debe soportar (al menos):
-      * una propiedad name (string)
-      * un metodo duration() que retorne la duración de la playlist.
-      * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
-  */
     const id = this.idGenerator.obtainId('playlist');
     const tracksMatchingGenres = this.getTracksMatchingGenres(genresToInclude); 
     const trackList = this.generateRandomTrackList(tracksMatchingGenres, maxDuration);
@@ -200,10 +186,10 @@ class UNQfy {
   generateRandomTrackList(tracks, maxDuration){
     const alltracks = tracks;
     const trackList = [];
-    var duration = 0;
-    while(duration < maxDuration & alltracks.length != 0 ){
-      let ranIndex = this.randomIndex(alltracks.length);
-      let track = alltracks.splice(ranIndex,1).pop();
+    let duration = 0;
+    while(duration < maxDuration & alltracks.length !== 0 ){
+      const ranIndex = this.randomIndex(alltracks.length);
+      const track = alltracks.splice(ranIndex,1).pop();
       if ((duration + track.duration) <= maxDuration){      
          trackList.push(track);
          duration = duration + track.duration;

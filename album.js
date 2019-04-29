@@ -35,10 +35,15 @@ class Album{
     }
 
     printTracksInfo(){
-        if(this.tracks.toArray === undefined){
-            return 'No available';
+        let tracksInfo = '';
+        for(const track in this.tracks){
+            const myTrackName = this.tracks[track].name;
+            tracksInfo = tracksInfo + '[' + myTrackName + '] ';
         }
-        return this.tracks.toArray;
+        if(tracksInfo === ''){
+            return 'No tracks available';
+        }
+        return tracksInfo;
     }
     
 }

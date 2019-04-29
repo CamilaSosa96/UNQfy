@@ -24,10 +24,15 @@
     }
 
     printAlbumsInfo(){
-        if(this.albums.toArray === undefined){
-            return 'No available';
+        let albumInfo = '';
+        for(const album in this.albums){
+            const myAlbumName = this.albums[album].name;
+            albumInfo = albumInfo + '[' + myAlbumName + '] ' ;
         }
-        return this.albums.toArray;
+        if(albumInfo === ''){
+            return 'No albums available';
+        }
+        return albumInfo;
     }
 
     addAlbum(album,albumId){
