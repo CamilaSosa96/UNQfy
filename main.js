@@ -121,8 +121,7 @@ function search(string){
 
 function getTracksMatchingGenres(genresString) {
   const unqfy = getUNQfy();
-  const matches = unqfy.getTracksMatchingGenres(parseGenresFromString(genresString));
-  console.log('Results:', matches);
+  unqfy.getTracksMatchingGenres(parseGenresFromString(genresString));
 }
 
 function parseGenresFromString(genresString) {

@@ -114,7 +114,18 @@ class UNQfy {
       const artist = this.artists[artistId];
       matches = matches.concat(artist.getTracksMatchingGenres(genres));
     }
+    console.log(`Results:
+    ${this.printMatches(matches)}`);
     return matches;
+  }
+
+  printMatches(matches){
+    let printedResults = '';
+    for (const match in matches){
+      const myMatch = matches[match];
+      printedResults = printedResults + myMatch.printInfo();
+    }
+    return printedResults;
   }
 
   getTracksMatchingArtist(artistId) {
