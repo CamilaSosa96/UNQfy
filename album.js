@@ -1,4 +1,3 @@
-
 class Album{
 
     constructor(_name, _year){
@@ -16,7 +15,7 @@ class Album{
     }
 
     getTracksMatchingGenres(genres) {
-        let matches = [];
+        const matches = [];
         for (const trackId in this.tracks) {
             const track = this.tracks[trackId];
             if (track.matchesGenres(genres)) {

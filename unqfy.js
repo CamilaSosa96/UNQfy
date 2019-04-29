@@ -38,38 +38,27 @@ class UNQfy {
     return false;
   }
 
-
-  // albumData: objeto JS con los datos necesarios para crear un album
-  //   albumData.name (string)
-  //   albumData.year (number)
-  // retorna: el nuevo album creado
   addAlbum(artistId, albumData) {
-  /* Crea un album y lo agrega al artista con id artistId.
-    El objeto album creado debe tener (al menos):
-     - una propiedad name (string)
-     - una propiedad year (number)
-  */
- const myAlbum = new Album(albumData.name, albumData.year);
- const result = this.getArtistById(artistId);
-    try{
-      if(result != null){
-        const albumId = this.idGenerator.obtainId('album'); 
-        this.artists[artistId].addAlbum(album,albumId);
-        return myAlbum;
+    const myAlbum = new Album(albumData.name, albumData.year);
+    const result = this.getArtistById(artistId);
+      try{
+        if(result !== null){
+        const albumId = this.idGenerator.obtainId('album');
+        this.artists[artistId].addAlbum(myAlbum,albumId);
         console.log(`Album ${albumData.name} added to Artist with id ${artistId} succesfully!`);
+        return myAlbum;
       }
     } catch (exception){ 
       console.log('Invalid artist id: ' + exception.message);
-    }
+    }  
   }
   
-
   addTrack(albumId, trackData) {
     const myTrack = new Track(trackData.name, trackData.duration, trackData.genres);
     try{
-      const myAlbum = this.getAlbumById(albumId)
+      const myAlbum = this.getAlbumById(albumId);
       const id = this.idGenerator.obtainId('track'); 
-      myAlbum.addTrack(id, myTrack)
+      myAlbum.addTrack(id, myTrack);
       console.log(` ${trackData.name} created succesfully!`);
       return myTrack;
     } catch (exception){ 
@@ -79,12 +68,11 @@ class UNQfy {
 
   getArtistById(id) {
     const artist = this.artists[id];
-    
     if((artist !== undefined)){
           return artist;
     }
     else{
-    throw new Error(`Artist with id ${id} doesnt exist!`);
+      throw new Error(`Artist with id ${id} doesnt exist!`);
     }
 
   }
@@ -101,10 +89,11 @@ class UNQfy {
   }
 
   getTrackById(id) {
+    console.log('1');
     for (const artistId in this.artists) {
       const artist = this.artists[artistId];
       for(const albumId in artist.albums){
-        const album = artists.albums[albumId];
+        const album = artist.albums[albumId];
         const myTrack = album.tracks[id];
         if(myTrack !== undefined){
           return myTrack;
@@ -201,13 +190,11 @@ class UNQfy {
 
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
-    //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, IdGenerator, IdIterator];
+    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }
 
-// COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 module.exports = {
   UNQfy,
 };

@@ -32,7 +32,7 @@
     }
 
     addAlbum(album,albumId){
-        this.albums[albumId].push(album);
+        this.albums[albumId] = album;
     }
  }
 

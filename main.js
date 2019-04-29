@@ -49,28 +49,66 @@ function main() {
   if(params[0] === 'addArtist'){
     addArtist(params[1], params[2]);
   }
+  // removeArtist(artistId)
+  if(params[0] === 'addAlbum'){
+    addAlbum(params[1], params[2], params[3]);
+  }
+  //removeAlbum(albumId)
+  if(params[0] === 'addTrack'){
+    addTrack(params[1], params[2], params[3], params[4]);
+  }
+  //removeTrack
+  //getAllArtists
+  //getAlbumsFromArtist
+  //getTracksFromAlbum
   if(params[0] === 'getTracksMatchingArtist'){
     getTracksMatchingArtist(params[1]);
   }
   if(params[0] === 'search'){
     search(params[1]);
   }
-  if(params[0] === 'addTrack'){
-    addTrack(params[1], params[2], params[3], params[4]);
-  }
   if(params[0] === 'getTracksMatchingGenres'){
     getTracksMatchingGenres(params[1]);
-  }  
-  // COLOCAR AQUÍ MÁS IFS POR CADA COMANDO A IMPLEMENTAR
+  }
+  //createPlaylist
+
+  if(params[0] === 'getbyid'){
+    getbyid(params[1]);
+  }
 }
 
-// COLOCAR A PARTIR DE AQUÍ LAS FUNCIONES QUE VAN A LLAMAR A LOS MÉTODOS DE UNQFY
+function getbyid(id){
+  const unqfy = getUNQfy();
+  unqfy.getTrackById(id);
+}
+
 function addArtist(name,country){
   const unqfy = getUNQfy();
   unqfy.addArtist({
     name: name,
     country: country
   });
+  saveUNQfy(unqfy);
+}
+
+function addAlbum(artistId, name, year){
+  const unqfy = getUNQfy();
+  const albumData = {
+    name: name,
+    year: year
+    };
+  unqfy.addAlbum(artistId, albumData);
+  saveUNQfy(unqfy);
+}
+
+function addTrack(albumId, name, duration, genresString){
+  const unqfy = getUNQfy();
+  const trackData = {
+    name: name,
+    duration: duration,
+    genres: parseGenresFromString(genresString),
+  };
+  unqfy.addTrack(albumId, trackData);
   saveUNQfy(unqfy);
 }
 
@@ -87,17 +125,6 @@ function search(string){
   unqfy.searchEntity(string);
 }
 
-function addTrack(albumId, name, duration, genresString){
-  const unqfy = getUNQfy();
-  const trackData = {
-    name: name,
-    duration: duration,
-    genres: parseGenresFromString(genresString),
-  };
-  unqfy.addTrack(albumId, trackData);
-  saveUNQfy(unqfy);
-}
-
 function getTracksMatchingGenres(genresString) {
   const unqfy = getUNQfy();
   const matches = unqfy.getTracksMatchingGenres(parseGenresFromString(genresString));
@@ -107,5 +134,6 @@ function getTracksMatchingGenres(genresString) {
 function parseGenresFromString(genresString) {
   return genresString.split(' ');
 }
+
 
 main();
