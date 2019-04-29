@@ -71,15 +71,6 @@ function main() {
     getTracksMatchingGenres(params[1]);
   }
   //createPlaylist
-
-  if(params[0] === 'getbyid'){
-    getbyid(params[1]);
-  }
-}
-
-function getbyid(id){
-  const unqfy = getUNQfy();
-  unqfy.getTrackById(id);
 }
 
 function addArtist(name,country){
