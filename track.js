@@ -8,7 +8,7 @@ class Track{
     }
 
     matchesGenres(searchGenres) {
-        for (let i = 0; i < searchGenres.length(); i++) {
+        for (let i = 0; i < searchGenres.length; i++) {
             const searchGenre = searchGenres[i];
             if (this.genres.indexOf(searchGenre) != -1) {
                 return true;

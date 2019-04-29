@@ -70,7 +70,10 @@ function main() {
   if(params[0] === 'getTracksMatchingGenres'){
     getTracksMatchingGenres(params[1]);
   }
-  //createPlaylist
+  if(params[0] === 'createPlaylist'){
+    createPlaylist(params[1], params[2], params[3]);
+  }
+  
 }
 
 function addArtist(name,country){
@@ -126,5 +129,9 @@ function parseGenresFromString(genresString) {
   return genresString.split(' ');
 }
 
-
+function createPlaylist(name, genresToInclude, maxDuration){
+  const unqfy = getUNQfy();
+  unqfy.createPlaylist(name, genresToInclude, maxDuration);
+  saveUNQfy(unqfy);
+}
 main();

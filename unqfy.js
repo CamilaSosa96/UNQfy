@@ -5,6 +5,7 @@ const Album = require('./album');
 const IdGenerator = require('./idGenerator');
 const IdIterator = require('./idIterator');
 const Track = require('./track');
+const Playlist = require('./playlist');
 
 class UNQfy {
 
@@ -68,7 +69,7 @@ class UNQfy {
 
   getArtistById(id) {
     const artist = this.artists[id];
-    if((artist !== undefined)){
+    if(artist !== undefined){
           return artist;
     }
     else{
@@ -175,7 +176,32 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
   */
+    const id = this.idGenerator.obtainId('playlist');
+    const tracksMatchingGenres = this.getTracksMatchingGenres(genresToInclude); 
+    const trackList = this.generateRandomTrackList(tracksMatchingGenres, maxDuration);
+    const myPlaylist = new Playlist(name, genresToInclude, trackList, trackList.duration );
+    this.playlists[id] = myPlaylist;
+    console.log(` Playlist ${name} created succesfully!`);
+    return myPlaylist;
+  }
 
+  generateRandomTrackList(tracks, maxDuration){
+    const alltracks = tracks;
+    const trackList = [];
+    var duration = 0;
+    while(duration < maxDuration & alltracks.length != 0 ){
+      let ranIndex = this.randomIndex(alltracks.length);
+      let track = alltracks.splice(ranIndex,1).pop();
+      if ((duration + track.duration) <= maxDuration){      
+         trackList.push(track);
+         duration = duration + track.duration;
+      }    
+    }
+    return trackList;  
+  }
+
+  randomIndex(maxIndex){
+    return Math.floor((Math.random() * maxIndex) );
   }
 
   save(filename) {
@@ -190,7 +216,7 @@ class UNQfy {
 
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
-    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track];
+    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }
