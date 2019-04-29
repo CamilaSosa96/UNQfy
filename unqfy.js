@@ -128,42 +128,54 @@ class UNQfy {
       }
     }
 
-  searchEntity(string){
-    const results = [];
-    for (const artist in this.artists){
-      const myArtist = this.artists[artist];
-      this.addToListIfMatches(results, myArtist, string);
-      for(const album in artist.albums){
-        const myAlbum = artist.albums[album];
-        this.addToListIfMatches(results, myAlbum, string);
-        for(const track in album.tracks){
-          const myTrack = album.tracks[track];
-          this.addToListIfMatches(results, myTrack, string);
+    searchEntity(string){
+      const artistList = [];
+      const albumList = [];
+      const trackList = [];
+      const playlistList = [];
+      for (const artist in this.artists){
+        const myArtist = this.artists[artist];
+        this.addToListIfMatches(artistList, myArtist, string);
+        for(const album in myArtist.albums){
+          const myAlbum = myArtist.albums[album];
+          this.addToListIfMatches(albumList, myAlbum, string);
+          for(const track in myAlbum.tracks){
+            const myTrack = myAlbum.tracks[track];
+            this.addToListIfMatches(trackList, myTrack, string);
+          }
         }
       }
+      for (const playlist in this.playlists){
+        const myPlaylist = this.playlists[playlist];
+        this.addToListIfMatches(playlistList, myPlaylist, string);
+      }
+      console.log(`Results:
+   ${this.printResults([artistList,albumList,trackList,playlistList])}`);
+      return({
+        artists: artistList,
+        albums: albumList,
+        tracks: trackList,
+        playlist: playlistList
+      });
     }
-    for (const playlist in this.playlists){
-      const myPlaylist = this.playlists[playlist];
-      this.addToListIfMatches(results, myPlaylist, string);
+  
+    addToListIfMatches(results, entity, string){
+      if(entity.name.includes(string)){
+        results.push(entity);
+      }
     }
-    console.log(`Results:            
-   ${this.printResults(results)}`);
-  }
-
-  addToListIfMatches(results, entity, string){
-    if(entity.name.includes(string)){
-      results.push(entity);
+  
+    printResults(results){
+      let printedResults = ' ';
+      for (const entityType in results){
+        const myEntityList = results[entityType];
+        for(const entity in myEntityList){ 
+        const myEntity = myEntityList[entity];
+        printedResults = printedResults + myEntity.printInfo();
+        }
+      }
+      return printedResults;
     }
-  }
-
-  printResults(results){
-    let printedResults = ' ';
-    for (const result in results){
-      const myResult = results[result];
-      printedResults = printedResults + myResult.printInfo();
-    }
-    return printedResults;
-  }
 
   // name: nombre de la playlist
   // genresToInclude: array de generos

@@ -15,13 +15,12 @@
     }
     
     printInfo(){
-        return (`--------- Artist --------- 
+        return (`--------- Artist ---------
     Name:    ${this.name} 
     Country: ${this.country}
     Albums:  ${this.printAlbumsInfo()}
     -------------------------- 
-    `
-        );
+    `);
     }
 
     printAlbumsInfo(){

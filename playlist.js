@@ -10,13 +10,12 @@ class Playlist{
 
     printInfo(){
         return (`--------- PlayList ---------
-        Name:     ${this.name} 
-        Genres:   ${this.genresToInclude}
-        Tracks:   ${this.tracks.toArray}
-        Duration: ${this.duration}
-        -------------------------- 
-        `
-        );
+    Name:     ${this.name} 
+    Genres:   ${this.genresToInclude}
+    Tracks:   ${this.tracks.toArray}
+    Duration: ${this.duration}
+    -------------------------- 
+    `);
     }
 }
 

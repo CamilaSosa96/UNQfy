@@ -26,13 +26,12 @@ class Album{
     }
 
     printInfo(){
-        return (`--------- Album ---------
-        Name:   ${this.name} 
-        Year:   ${this.year}
-        Tracks: ${this.printTracksInfo()}
-        -------------------------- 
-        `
-        );
+        return (`--------- Album ----------
+    Name:   ${this.name} 
+    Year:   ${this.year}
+    Tracks: ${this.printTracksInfo()}
+    -------------------------- 
+    `);
     }
 
     printTracksInfo(){
