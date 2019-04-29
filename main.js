@@ -108,10 +108,7 @@ function addTrack(albumId, name, duration, genresString){
 
 function getTracksMatchingArtist(artistId){
   const unqfy = getUNQfy();
-  const tracks = unqfy.getTracksMatchingArtist(artistId);
-  for (const track in tracks){
-    console.log(track.printInfo());
-  } 
+  unqfy.getTracksMatchingArtist(artistId);
 }
 
 function search(string){

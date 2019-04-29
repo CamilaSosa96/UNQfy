@@ -126,37 +126,45 @@ class UNQfy {
       printedResults = printedResults + myMatch.printInfo();
     }
     return printedResults;
-  }
+  }    
 
   getTracksMatchingArtist(artistId) {
-    let tracks = [];
-      for (const album in this.artists[artistId].albums){
-        tracks = tracks + album.tracks;
+    const tracks = [];
+    const myArtist = this.artists[artistId];
+    for (const album in myArtist.albums){
+      const myAlbum = myArtist.albums[album];
+      for (const track in myAlbum.tracks){
+        const myTrack = myAlbum.tracks[track];
+        tracks.push(myTrack);
       }
     }
+    console.log(`Results:
+    ${this.printMatches(tracks)}`);
+    return tracks;
+  }
 
-    searchEntity(string){
-      const artistList = [];
-      const albumList = [];
-      const trackList = [];
-      const playlistList = [];
-      for (const artist in this.artists){
-        const myArtist = this.artists[artist];
-        this.addToListIfMatches(artistList, myArtist, string);
-        for(const album in myArtist.albums){
-          const myAlbum = myArtist.albums[album];
-          this.addToListIfMatches(albumList, myAlbum, string);
-          for(const track in myAlbum.tracks){
-            const myTrack = myAlbum.tracks[track];
-            this.addToListIfMatches(trackList, myTrack, string);
-          }
+  searchEntity(string){
+    const artistList = [];
+    const albumList = [];
+    const trackList = [];
+    const playlistList = [];
+    for (const artist in this.artists){
+      const myArtist = this.artists[artist];
+      this.addToListIfMatches(artistList, myArtist, string);
+      for(const album in myArtist.albums){
+        const myAlbum = myArtist.albums[album];
+        this.addToListIfMatches(albumList, myAlbum, string);
+        for(const track in myAlbum.tracks){
+          const myTrack = myAlbum.tracks[track];
+          this.addToListIfMatches(trackList, myTrack, string);
         }
       }
-      for (const playlist in this.playlists){
-        const myPlaylist = this.playlists[playlist];
-        this.addToListIfMatches(playlistList, myPlaylist, string);
-      }
-      console.log(`Results:
+    }
+    for (const playlist in this.playlists){
+      const myPlaylist = this.playlists[playlist];
+      this.addToListIfMatches(playlistList, myPlaylist, string);
+    }
+    console.log(`Results:
    ${this.printResults([artistList,albumList,trackList,playlistList])}`);
       return({
         artists: artistList,
