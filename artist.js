@@ -39,16 +39,14 @@
         this.albums[albumId] = album;
     }
 
-    deleteAlbum(albumId){
-        delete this.albums[albumId];
-    }
-
-    hasAlbum(searchAlbum){
-        for (const albumId in this.albums){
-            const album = this.albums[albumId];
-            if (album == searchAlbum) return true;                
+    deleteAlbumIfExists(album){
+        const albumToDelete = album;
+        for(const albumId in this.albums){
+            const myAlbum = this.albums[albumId];
+            if(albumToDelete === myAlbum){
+                delete this.albums[albumId];
+            }
         }
-        return false;
     }
  }
 

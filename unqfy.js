@@ -69,21 +69,14 @@ class UNQfy {
   }
 
   deleteAlbum(albumId) {
-    const tracks = this.getTracksFromAlbum(albumId);
-    for (const trackId in tracks){
-      const track = tracks[trackId];
-      for (const playlistId in this.playlist) {
-        const playlist = this.playlist[playlistId];
-        if (playlist.hasTrack(track)){
-          playlist.deleteTrack(track);
-        }
-      }   
-    } 
-    for (const artistId in this.artists){
-      const artist = this.artists[artistId];
-      if(artist.hasAlbum(this.getAlbumById(albumId)))
-        artist.deleteAlbum(albumId);
+    const myAlbum = this.getEntity('album', albumId);
+    for(const trackId in myAlbum.tracks){
+      this.deleteTrack(trackId);
     }
+    for(const artistId in this.artists){
+      const myArtist = this.artists[artistId];
+      myArtist.deleteAlbumIfExists(myAlbum);
+    } 
   }
   
   addTrack(albumId, trackData) {
@@ -109,7 +102,6 @@ class UNQfy {
       const myArtist = this.getEntity('artist', artistId);
       for(const albumId in myArtist.albums){
         const myAlbum = this.getEntity('album', albumId);
-        console.log('1');
         myAlbum.deleteTrackIfExists(myTrack);
       }
     }
