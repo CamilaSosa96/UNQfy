@@ -23,7 +23,6 @@
 | **removeArtistById**        | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
 | **removeAlbumById**         | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
 | **removeTrackById**         | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
-| **removePlaylistById**      | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
 | **getTracksMatchingArtist** | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
 | **getTracksMatchingGenres** | **_genresString_** - [String] |<p align="center"> - </p> |<p align="center"> - </p>|<p align="center"> - </p>|
 | **getTracksFromAlbum**      | **_id_** - Int          | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
