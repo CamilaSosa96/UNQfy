@@ -14,7 +14,7 @@
 
 # Interfaz
 
-| COMANDOS                | PARAMETRO 1                                          | PARAMETRO 2                                    | PARAMETRO 3                                    | PARAMETRO 4                 |
+| COMANDOS                | PARAMETRO 1                 | PARAMETRO 2                 | PARAMETRO 3           | PARAMETRO 4                 |
 |-------------------------|-----------------------------------------------------------|-----------------------------------------------------|----------------------------------------------------|----------------------------------|
 | **addArtist**               | **_name_** - String     | **_country_** - String   |<p align="center"> - </p>|<p align="center"> - </p>|
 | **addAlbum**                | **_artistId_** - Int    | **_name_** - String      | **_year_** - Int   |<p align="center"> - </p>|
@@ -28,6 +28,10 @@
 | **removeAlbumById**         | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
 | **removeTrackById**         | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
 | **removePlaylistById**      | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
-| **getTracksMatchingArtist** | **_id_** - Int          |<p align="center"> - </p>    |<p align="center"> - </p>|<p align="center"> - </p>|
-| **getTracksMatchingGenres** | **_genresString_** - [String] |<p align="center"> - </p> |<p align="center"> - </p>|<p align="center"> - </p>     |
-| **search**                  | **_name_** - String           | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
+| **getTracksMatchingArtist** | **_id_** - Int          |<p align="center"> - </p>|<p align="center"> - </p>|<p align="center"> - </p>|
+| **getTracksMatchingGenres** | **_genresString_** - [String] |<p align="center"> - </p> |<p align="center"> - </p>|<p align="center"> - </p>|
+| **getTracksFromAlbum**      | **_id_** - Int          | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
+| **getAlbumsFromArtist**     | **_id_** - Int          | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
+| **getAllArtists**           | -                       | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
+| **search**                  | **_name_** - String     | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
+| **show**                    | **_entityName_** - String| **_entityId_** - Int    | <p align="center"> - </p>|<p align="center"> - </p>|
