@@ -29,7 +29,7 @@ class UNQfy {
     }
   }
 
-  artistAlreadyExists(artistName){
+  artistAlreadyExists(artistName) {
     for (let i = 0; i< this.artists.length; i++){
       const myArtist = this.artists[i];
       if((myArtist !== undefined) && (this.artists[i].name === artistName)){
@@ -37,6 +37,20 @@ class UNQfy {
       }
     }
     return false;
+  }
+
+  deleteArtist(artistId) {
+    const tracks = this.getTracksMatchingArtist(artistId);
+    for (let i=0; i< tracks.length(); i++){
+      const track = tracks[i];
+      for (const playlistId in this.playlist) {
+        const playlist = this.playlist[playlistId];
+        if (playlist.hasTrack(track)){
+          playlist.deleteTrack(track);
+        }
+      }   
+    } 
+    delete this.artists[artistId];
   }
 
   addAlbum(artistId, albumData) {
@@ -53,6 +67,24 @@ class UNQfy {
       console.log('Invalid artist id: ' + exception.message);
     }  
   }
+
+  deleteAlbum(albumId) {
+    const tracks = this.getTracksFromAlbum(albumId);
+    for (let i=0; i< tracks.length(); i++){
+      const track = tracks[i];
+      for (const playlistId in this.playlist) {
+        const playlist = this.playlist[playlistId];
+        if (playlist.hasTrack(track)){
+          playlist.deleteTrack(track);
+        }
+      }   
+    } 
+    for (const artistId in this.artists){
+      const artist = this.artists[artistId];
+      if(artist.hasAlbum(this.getAlbumById(albumId)))
+        artist.deleteAlbum(albumId);
+    }
+  }
   
   addTrack(albumId, trackData) {
     const myTrack = new Track(trackData.name, trackData.duration, trackData.genres);
@@ -67,6 +99,21 @@ class UNQfy {
     }
   }
 
+  deleteTrack(trackId) {
+    const track = this.getTrackById(trackId);
+    for (const playlistId in this.playlists){
+      const playlist = this.playlists[playlistId];
+      playlist.deleteTrack(track);
+      }
+    for (const artistId in this.artists) {
+      this.getAlbumsfromArtist(artistId).forEach(function(album){
+        if (album.hasTrack(track)){
+          album.deletTrack(trackId);
+        }
+      })
+    }
+  }
+
   getArtistById(id) {
     const artist = this.artists[id];
     if(artist !== undefined){
@@ -75,7 +122,6 @@ class UNQfy {
     else{
       throw new Error(`Artist with id ${id} doesnt exist!`);
     }
-
   }
 
   getAlbumById(id) {
@@ -105,7 +151,13 @@ class UNQfy {
   }
 
   getPlaylistById(id) {
-    return this.playlists[id];
+    const playlist = this.playlist[id];
+    if (playlist !== undefined){
+      return playlist;
+    }
+    else{
+      throw new Error (`Playlist with Id ${id} doesnt exist!`)
+    }
   }
 
   getTracksMatchingGenres(genres) {
@@ -130,7 +182,7 @@ class UNQfy {
     return tracks;
   }
 
-  searchEntity(string){
+  searchEntity(string) {
     const artistList = [];
     const albumList = [];
     const trackList = [];
@@ -159,7 +211,7 @@ class UNQfy {
       });
     }
   
-    addToListIfMatches(results, entity, string){
+    addToListIfMatches(results, entity, string) {
       if(entity.name.includes(string)){
         results.push(entity);
       }
@@ -175,7 +227,7 @@ class UNQfy {
     return myPlaylist;
   }
 
-  generateRandomTrackList(tracks, maxDuration){
+  generateRandomTrackList(tracks, maxDuration) {
     const alltracks = tracks;
     const trackList = [];
     let duration = 0;
@@ -190,7 +242,7 @@ class UNQfy {
     return trackList;  
   }
 
-  randomIndex(maxIndex){
+  randomIndex(maxIndex) {
     return Math.floor((Math.random() * maxIndex) );
   }
 

@@ -38,6 +38,18 @@
     addAlbum(album,albumId){
         this.albums[albumId] = album;
     }
+
+    deleteAlbum(albumId){
+        delete this.albums[albumId];
+    }
+
+    hasAlbum(searchAlbum){
+        for (const albumId in this.albums){
+            const album = this.albums[albumId];
+            if (album == searchAlbum) return true;                
+        }
+        return false;
+    }
  }
 
  module.exports = Artist;

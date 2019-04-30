@@ -43,6 +43,14 @@ class Playlist{
         }
         return duration
     }
+
+    hasTrack(track){
+        this.tracks.includes(track);
+    }
+
+    deleteTrack(track){
+        this.tracks.splice(this.tracks.indexOf(track), 1);
+    }
 }
 
 module.exports = Playlist;

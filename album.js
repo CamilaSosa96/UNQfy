@@ -14,6 +14,18 @@ class Album{
         this.tracks[id] = newTrack;
     }
 
+    deleteTrack(trackId){
+        delete this.tracks[trackId];
+    }
+
+    hasTrack(searchTrack){
+        for (const trackId in this.tracks){
+            const track = this.tracks[trackId];
+            if (track == searchTrack) return true;                
+        }
+        return false;
+    }
+
     getTracksMatchingGenres(genres) {
         const matches = [];
         for (const trackId in this.tracks) {
