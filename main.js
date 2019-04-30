@@ -193,7 +193,7 @@ function createPlaylist(name, genresToInclude, maxDuration){
 
 function show(entity, id){
   const unqfy = getUNQfy();
-  const myEntity = unqfy.show(entity, id);
+  const myEntity = unqfy.getEntity(entity, id);
   console.log(`Results:
     ${myEntity.printInfo()}`);
 }

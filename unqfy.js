@@ -272,7 +272,7 @@ class UNQfy {
     return Math.floor((Math.random() * maxIndex) );
   }
 
-  show(entity, id){
+  getEntity(entity, id){
     if(entity === 'artist'){
       return this.getArtistById(id);
     }
