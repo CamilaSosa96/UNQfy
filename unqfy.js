@@ -41,8 +41,8 @@ class UNQfy {
 
   deleteArtist(artistId) {
     const tracks = this.getTracksMatchingArtist(artistId);
-    for (let i=0; i< tracks.length(); i++){
-      const track = tracks[i];
+    for (const trackId in tracks){
+      const track = tracks[trackId];
       for (const playlistId in this.playlist) {
         const playlist = this.playlist[playlistId];
         if (playlist.hasTrack(track)){
@@ -70,8 +70,8 @@ class UNQfy {
 
   deleteAlbum(albumId) {
     const tracks = this.getTracksFromAlbum(albumId);
-    for (let i=0; i< tracks.length(); i++){
-      const track = tracks[i];
+    for (const trackId in tracks){
+      const track = tracks[trackId];
       for (const playlistId in this.playlist) {
         const playlist = this.playlist[playlistId];
         if (playlist.hasTrack(track)){
@@ -110,7 +110,7 @@ class UNQfy {
         if (album.hasTrack(track)){
           album.deletTrack(trackId);
         }
-      })
+      });
     }
   }
 
@@ -156,8 +156,32 @@ class UNQfy {
       return playlist;
     }
     else{
-      throw new Error (`Playlist with Id ${id} doesnt exist!`)
+      throw new Error (`Playlist with Id ${id} doesnt exist!`);
     }
+  }
+
+  getAllArtists(){
+    return this.artists;
+  }
+
+  getTracksFromAlbum(albumId){
+    const tracks = [];
+    const myAlbum = this.getAlbumById(albumId);
+    for(const track in myAlbum.tracks){
+      const myTrack = myAlbum.tracks[track];
+      tracks.push(myTrack); 
+    }
+    return tracks;
+  }
+
+  getAlbumsFromArtist(artistId){
+    const albums = [];
+    const myArtist = this.getArtistById(artistId);
+    for(const album in myArtist.albums){
+      const myAlbum = myArtist.albums[album];
+      albums.push(myAlbum); 
+    }
+    return albums;
   }
 
   getTracksMatchingGenres(genres) {
@@ -266,4 +290,3 @@ class UNQfy {
 module.exports = {
   UNQfy,
 };
-

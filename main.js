@@ -49,18 +49,30 @@ function main() {
   if(params[0] === 'addArtist'){
     addArtist(params[1], params[2]);
   }
-  // removeArtist(artistId)
+  if(params[0] === 'removeArtist'){
+    removeArtist(params[1]);
+  }
   if(params[0] === 'addAlbum'){
     addAlbum(params[1], params[2], params[3]);
   }
-  //removeAlbum(albumId)
+  if(params[0] === 'removeAlbum'){
+    removeAlbum(params[1]);
+  }
   if(params[0] === 'addTrack'){
     addTrack(params[1], params[2], params[3], params[4]);
   }
-  //removeTrack
-  //getAllArtists
-  //getAlbumsFromArtist
-  //getTracksFromAlbum
+  if(params[0] === 'removeTrack'){
+    removeTrack(params[1]);
+  }
+  if(params[0] === 'getAllArtists'){
+    getAllArtists();
+  }
+  if(params[0] === 'getAlbumsFromArtist'){
+    getAlbumsFromArtist(params[1]);
+  }
+  if(params[0] === 'getTracksFromAlbum'){
+    getTracksFromAlbum(params[1]);
+  }
   if(params[0] === 'getTracksMatchingArtist'){
     getTracksMatchingArtist(params[1]);
   }
@@ -85,6 +97,12 @@ function addArtist(name,country){
   saveUNQfy(unqfy);
 }
 
+function removeArtist(artistId){
+  const unqfy = getUNQfy();
+  unqfy.deleteArtist(artistId);
+  saveUNQfy(unqfy);
+}
+
 function addAlbum(artistId, name, year){
   const unqfy = getUNQfy();
   const albumData = {
@@ -92,6 +110,12 @@ function addAlbum(artistId, name, year){
     year: year
     };
   unqfy.addAlbum(artistId, albumData);
+  saveUNQfy(unqfy);
+}
+
+function removeAlbum(albumId){
+  const unqfy = getUNQfy();
+  unqfy.deleteAlbum(albumId);
   saveUNQfy(unqfy);
 }
 
@@ -104,6 +128,33 @@ function addTrack(albumId, name, duration, genresString){
   };
   unqfy.addTrack(albumId, trackData);
   saveUNQfy(unqfy);
+}
+
+function removeTrack(trackId){
+  const unqfy = getUNQfy();
+  unqfy.deleteTrack(trackId);
+  saveUNQfy();
+}
+
+function getAllArtists(){
+  const unqfy = getUNQfy();
+  const allArtist = unqfy.getAllArtists();
+  console.log(`Results:
+    ${printMatches(allArtist)}`);
+}
+
+function getAlbumsFromArtist(id){
+  const unqfy = getUNQfy();
+  const albums = unqfy.getAlbumsFromArtist(id);
+  console.log(`Results:
+    ${printMatches(albums)}`);
+}
+
+function getTracksFromAlbum(id){
+  const unqfy = getUNQfy();
+  const tracks = unqfy.getTracksFromAlbum(id);
+  console.log(`Results:
+    ${printMatches(tracks)}`);
 }
 
 function getTracksMatchingArtist(artistId){
