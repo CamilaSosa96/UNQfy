@@ -117,7 +117,7 @@ function search(string){
   const unqfy = getUNQfy();
   const results = unqfy.searchEntity(string);
   console.log(`Results:
-    ${printResults([results.artists,results.albums,results.tracks,results.playlist])}`);
+   ${printResults([results.artists,results.albums,results.tracks,results.playlist])}`);
 }
 
 function getTracksMatchingGenres(genresString) {

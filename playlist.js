@@ -13,7 +13,7 @@ class Playlist{
     Name:     ${this.name} 
     Genres:   ${this.printGenres()}
     Tracks:   ${this.printTracksInfo()}
-    Duration: ${this.duration}
+    Duration: ${this.calculateDuration()} seconds
     -------------------------- 
     `);
     }
@@ -34,6 +34,14 @@ class Playlist{
             genresInfo = genresInfo + '[' + myGenre + '] ';
         }
         return genresInfo;
+    }
+
+    calculateDuration(){
+        let duration = 0;
+        for(const track in this.tracks){
+            duration = duration + (parseInt(this.tracks[track].duration));
+        }
+        return duration
     }
 }
 

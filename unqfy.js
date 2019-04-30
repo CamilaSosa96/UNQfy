@@ -169,7 +169,7 @@ class UNQfy {
     const id = this.idGenerator.obtainId('playlist');
     const tracksMatchingGenres = this.getTracksMatchingGenres(genresToInclude); 
     const trackList = this.generateRandomTrackList(tracksMatchingGenres, maxDuration);
-    const myPlaylist = new Playlist(name, genresToInclude, trackList, trackList.duration );
+    const myPlaylist = new Playlist(name, genresToInclude, trackList, maxDuration );
     this.playlists[id] = myPlaylist;
     console.log(` Playlist ${name} created succesfully!`);
     return myPlaylist;
