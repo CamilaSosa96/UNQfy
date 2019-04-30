@@ -168,9 +168,9 @@ function getTracksMatchingArtist(artistId){
 
 function search(string){
   const unqfy = getUNQfy();
-  const results = unqfy.searchEntity(string);
+  const results = unqfy.searchByName(string);
   console.log(`Results:
-   ${printResults([results.artists,results.albums,results.tracks,results.playlist])}`);
+   ${printResults([results.artists,results.albums,results.tracks,results.playlists])}`);
 }
 
 function getTracksMatchingGenres(genresString) {
