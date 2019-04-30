@@ -1,4 +1,3 @@
-# UNQfy
 **Miembros del grupo:**
 <br>
 <br>
@@ -30,3 +29,5 @@
 | **getAllArtists**           | -                       | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
 | **search**                  | **_name_** - String     | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
 | **show**                    | **_entityName_** - String| **_entityId_** - Int    | <p align="center"> - </p>|<p align="center"> - </p>|
+=======
+
