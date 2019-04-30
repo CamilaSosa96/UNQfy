@@ -127,7 +127,8 @@ function parseGenresFromString(genresString) {
 
 function createPlaylist(name, genresToInclude, maxDuration){
   const unqfy = getUNQfy();
-  unqfy.createPlaylist(name, genresToInclude, maxDuration);
+  const genres = parseGenresFromString(genresToInclude);
+  unqfy.createPlaylist(name, genres, maxDuration);
   saveUNQfy(unqfy);
 }
 main();

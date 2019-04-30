@@ -9,9 +9,9 @@ class Playlist{
     }
 
     printInfo(){
-        return (`--------- PlayList ---------
+        return (`-------- PlayList --------
     Name:     ${this.name} 
-    Genres:   ${this.genresToInclude}
+    Genres:   ${this.printGenres()}
     Tracks:   ${this.printTracksInfo()}
     Duration: ${this.duration}
     -------------------------- 
@@ -25,6 +25,15 @@ class Playlist{
             tracksInfo = tracksInfo + '[' + myTrackName + '] ';
         }
         return tracksInfo;
+    }
+
+    printGenres(){
+        let genresInfo = '';
+        for (const genre in this.genresToInclude){
+            const myGenre = this.genresToInclude[genre];
+            genresInfo = genresInfo + '[' + myGenre + '] ';
+        }
+        return genresInfo;
     }
 }
 
