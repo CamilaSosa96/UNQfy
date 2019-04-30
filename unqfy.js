@@ -100,18 +100,17 @@ class UNQfy {
   }
 
   deleteTrack(trackId) {
-    const track = this.getTrackById(trackId);
+    const myTrack = this.getEntity('track',trackId);
     for (const playlistId in this.playlists){
       const playlist = this.playlists[playlistId];
-      playlist.deleteTrack(track);
+      playlist.deleteTrackIfExists(myTrack);
       }
-    for (const artistId in this.artists) {
-      const albums = this.getAlbumsFromArtist(artistId);
-      for(const albumId in albums){
-        const myAlbum = albums[albumId];
-        if(myAlbum.hasTrack(track)){
-          myAlbum.deleteTrack();
-        }
+    for(const artistId in this.artists){
+      const myArtist = this.getEntity('artist', artistId);
+      for(const albumId in myArtist.albums){
+        const myAlbum = this.getEntity('album', albumId);
+        console.log('1');
+        myAlbum.deleteTrackIfExists(myTrack);
       }
     }
   }
@@ -138,7 +137,6 @@ class UNQfy {
   }
 
   getTrackById(id) {
-    console.log('1');
     for (const artistId in this.artists) {
       const artist = this.artists[artistId];
       for(const albumId in artist.albums){

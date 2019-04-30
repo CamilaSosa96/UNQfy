@@ -9,21 +9,19 @@ class Album{
     addTrack(id, newTrack){
         for (const trackId in this.tracks) {
             const track = this.tracks[trackId];
-            if (track.name === newTrack.name) throw Error (`Ya existe un track con el nombre ${newTrack.name} en este álbum`)
+            if (track.name === newTrack.name) throw Error (`Ya existe un track con el nombre ${newTrack.name} en este álbum`);
         }
         this.tracks[id] = newTrack;
     }
 
-    deleteTrack(trackId){
-        delete this.tracks[trackId];
-    }
-
-    hasTrack(searchTrack){
-        for (const trackId in this.tracks){
-            const track = this.tracks[trackId];
-            if (track == searchTrack) return true;                
+    deleteTrackIfExists(track){
+        const trackToDelete = track;
+        for(const trackId in this.tracks){
+            const myTrack = this.tracks[trackId];
+            if(trackToDelete === myTrack){
+                delete this.tracks[trackId];
+            }
         }
-        return false;
     }
 
     getTracksMatchingGenres(genres) {

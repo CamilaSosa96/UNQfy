@@ -135,7 +135,7 @@ function addTrack(albumId, name, duration, genresString){
 function removeTrack(trackId){
   const unqfy = getUNQfy();
   unqfy.deleteTrack(trackId);
-  saveUNQfy();
+  saveUNQfy(unqfy);
 }
 
 function getAllArtists(){

@@ -41,15 +41,17 @@ class Playlist{
         for(const track in this.tracks){
             duration = duration + (parseInt(this.tracks[track].duration));
         }
-        return duration
+        return duration;
     }
 
-    hasTrack(track){
-        this.tracks.includes(track);
-    }
-
-    deleteTrack(track){
-        this.tracks.splice(this.tracks.indexOf(track), 1);
+    deleteTrackIfExists(track){
+        const trackToDelete = track;
+        for(const trackId in this.tracks){
+            const myTrack = this.tracks[trackId];
+            if(trackToDelete === myTrack){
+                delete this.tracks[trackId];
+            }
+        }
     }
 }
 
