@@ -85,7 +85,9 @@ function main() {
   if(params[0] === 'createPlaylist'){
     createPlaylist(params[1], params[2], params[3]);
   }
-  
+  if(params[0] === 'show'){
+    show(params[1], params[2]);
+  }
 }
 
 function addArtist(name,country){
@@ -189,6 +191,13 @@ function createPlaylist(name, genresToInclude, maxDuration){
   saveUNQfy(unqfy);
 }
 
+function show(entity, id){
+  const unqfy = getUNQfy();
+  const myEntity = unqfy.show(entity, id);
+  console.log(`Results:
+    ${myEntity.printInfo()}`);
+}
+
 function printMatches(matches){
   let printedResults = '';
   for (const match in matches){
@@ -209,5 +218,4 @@ function printResults(results){
   }
   return printedResults;
 }
-
 main();

@@ -106,11 +106,13 @@ class UNQfy {
       playlist.deleteTrack(track);
       }
     for (const artistId in this.artists) {
-      this.getAlbumsfromArtist(artistId).forEach(function(album){
-        if (album.hasTrack(track)){
-          album.deletTrack(trackId);
+      const albums = this.getAlbumsFromArtist(artistId);
+      for(const albumId in albums){
+        const myAlbum = albums[albumId];
+        if(myAlbum.hasTrack(track)){
+          myAlbum.deleteTrack();
         }
-      });
+      }
     }
   }
 
@@ -151,7 +153,7 @@ class UNQfy {
   }
 
   getPlaylistById(id) {
-    const playlist = this.playlist[id];
+    const playlist = this.playlists[id];
     if (playlist !== undefined){
       return playlist;
     }
@@ -268,6 +270,21 @@ class UNQfy {
 
   randomIndex(maxIndex) {
     return Math.floor((Math.random() * maxIndex) );
+  }
+
+  show(entity, id){
+    if(entity === 'artist'){
+      return this.getArtistById(id);
+    }
+    if(entity === 'album'){
+      return this.getAlbumById(id);
+    }
+    if(entity === 'track'){
+      return this.getTrackById(id);
+    }
+    if(entity === 'playlist'){
+      return this.getPlaylistById(id);
+    }
   }
 
   save(filename) {
