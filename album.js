@@ -1,6 +1,7 @@
 class Album{
 
-    constructor(_name, _year){
+    constructor(_id, _name, _year){
+        this.id = _id;
         this.name = _name;
         this.year = _year;
         this.tracks = {};

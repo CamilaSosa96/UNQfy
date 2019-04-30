@@ -16,10 +16,10 @@ class UNQfy {
   }
   
   addArtist(artistData) {  
-    const myArtist = new Artist(artistData.name, artistData.country);
     try{
       if(!this.artistAlreadyExists(artistData.name)){
         const id = this.idGenerator.obtainId('artist'); 
+        const myArtist = new Artist(id, artistData.name, artistData.country);
         this.artists[id] = myArtist;
         console.log(`Artist ${artistData.name} created succesfully!`);
         return myArtist;
@@ -47,12 +47,12 @@ class UNQfy {
     delete this.artists[artistId];
   }
 
-  addAlbum(artistId, albumData) {
-    const myAlbum = new Album(albumData.name, albumData.year);
-    const result = this.getArtistById(artistId);
-      try{
+  addAlbum(artistId, albumData) {   
+      try{ 
+        const result = this.getArtistById(artistId);
         if(result !== null){
         const albumId = this.idGenerator.obtainId('album');
+        const myAlbum = new Album(albumId, albumData.name, albumData.year);
         this.artists[artistId].addAlbum(myAlbum,albumId);
         console.log(`Album ${albumData.name} added to Artist with id ${artistId} succesfully!`);
         return myAlbum;
@@ -192,7 +192,7 @@ class UNQfy {
     return tracks;
   }
 
-  searchEntity(string) {
+  searchByName(string) {
     const artistList = [];
     const albumList = [];
     const trackList = [];
@@ -217,7 +217,7 @@ class UNQfy {
         artists: artistList,
         albums: albumList,
         tracks: trackList,
-        playlist: playlistList
+        playlists: playlistList
       });
     }
   

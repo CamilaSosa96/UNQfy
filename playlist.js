@@ -53,6 +53,15 @@ class Playlist{
             }
         }
     }
+
+    hasTrack(track){
+        const trackImSearching = track;
+        for(const trackId in this.tracks){
+            const myTrack = this.tracks[trackId];
+            if(trackImSearching === myTrack){return true;}
+        }
+        return false;
+    }
 }
 
 module.exports = Playlist;

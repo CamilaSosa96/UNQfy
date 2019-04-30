@@ -1,5 +1,6 @@
  class Artist {
-    constructor(_name, _country = 'No available'){
+    constructor(_id, _name, _country = 'No available'){
+        this.id = _id;
         this.name = _name;
         this.country = _country;
         this.albums = {};
