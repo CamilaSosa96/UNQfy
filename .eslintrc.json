@@ -35,14 +35,8 @@
        "require-jsdoc": "off",
        "react/prop-types": "off",
        "no-console": "off",
-        "indent": [
-            "warn",
-            2
-        ],
-        "linebreak-style": [
-            "warn",
-            "unix"
-        ],
+        "indent": "off",
+        "linebreak-style": "off",
         "quotes": [
             "warn",
             "single"
