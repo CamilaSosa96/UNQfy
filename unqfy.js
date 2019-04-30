@@ -40,16 +40,10 @@ class UNQfy {
   }
 
   deleteArtist(artistId) {
-    const tracks = this.getTracksMatchingArtist(artistId);
-    for (const trackId in tracks){
-      const track = tracks[trackId];
-      for (const playlistId in this.playlist) {
-        const playlist = this.playlist[playlistId];
-        if (playlist.hasTrack(track)){
-          playlist.deleteTrack(track);
-        }
-      }   
-    } 
+    const myArtist = this.getEntity('artist', artistId);
+    for(const albumId in myArtist.albums){
+      this.deleteAlbum(albumId);
+    }
     delete this.artists[artistId];
   }
 
