@@ -108,17 +108,23 @@ function addTrack(albumId, name, duration, genresString){
 
 function getTracksMatchingArtist(artistId){
   const unqfy = getUNQfy();
-  unqfy.getTracksMatchingArtist(artistId);
+  const tracks = unqfy.getTracksMatchingArtist(artistId);
+  console.log(`Results:
+    ${printMatches(tracks)}`);
 }
 
 function search(string){
   const unqfy = getUNQfy();
-  unqfy.searchEntity(string);
+  const results = unqfy.searchEntity(string);
+  console.log(`Results:
+    ${printResults([results.artists,results.albums,results.tracks,results.playlist])}`);
 }
 
 function getTracksMatchingGenres(genresString) {
   const unqfy = getUNQfy();
-  unqfy.getTracksMatchingGenres(parseGenresFromString(genresString));
+  const tracks = unqfy.getTracksMatchingGenres(parseGenresFromString(genresString));
+  console.log(`Results:
+    ${printMatches(tracks)}`);
 }
 
 function parseGenresFromString(genresString) {
@@ -131,4 +137,26 @@ function createPlaylist(name, genresToInclude, maxDuration){
   unqfy.createPlaylist(name, genres, maxDuration);
   saveUNQfy(unqfy);
 }
+
+function printMatches(matches){
+  let printedResults = '';
+  for (const match in matches){
+    const myMatch = matches[match];
+    printedResults = printedResults + myMatch.printInfo();
+  }
+  return printedResults;
+}
+
+function printResults(results){
+  let printedResults = ' ';
+  for (const entityType in results){
+    const myEntityList = results[entityType];
+    for(const entity in myEntityList){ 
+    const myEntity = myEntityList[entity];
+    printedResults = printedResults + myEntity.printInfo();
+    }
+  }
+  return printedResults;
+}
+
 main();

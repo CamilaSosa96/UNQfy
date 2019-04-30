@@ -114,19 +114,8 @@ class UNQfy {
       const artist = this.artists[artistId];
       matches = matches.concat(artist.getTracksMatchingGenres(genres));
     }
-    console.log(`Results:
-    ${this.printMatches(matches)}`);
     return matches;
-  }
-
-  printMatches(matches){
-    let printedResults = '';
-    for (const match in matches){
-      const myMatch = matches[match];
-      printedResults = printedResults + myMatch.printInfo();
-    }
-    return printedResults;
-  }    
+  }   
 
   getTracksMatchingArtist(artistId) {
     const tracks = [];
@@ -138,8 +127,6 @@ class UNQfy {
         tracks.push(myTrack);
       }
     }
-    console.log(`Results:
-    ${this.printMatches(tracks)}`);
     return tracks;
   }
 
@@ -164,8 +151,6 @@ class UNQfy {
       const myPlaylist = this.playlists[playlist];
       this.addToListIfMatches(playlistList, myPlaylist, string);
     }
-    console.log(`Results:
-   ${this.printResults([artistList,albumList,trackList,playlistList])}`);
       return({
         artists: artistList,
         albums: albumList,
@@ -178,18 +163,6 @@ class UNQfy {
       if(entity.name.includes(string)){
         results.push(entity);
       }
-    }
-  
-    printResults(results){
-      let printedResults = ' ';
-      for (const entityType in results){
-        const myEntityList = results[entityType];
-        for(const entity in myEntityList){ 
-        const myEntity = myEntityList[entity];
-        printedResults = printedResults + myEntity.printInfo();
-        }
-      }
-      return printedResults;
     }
 
   createPlaylist(name, genresToInclude, maxDuration) {
