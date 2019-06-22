@@ -70,50 +70,82 @@ function main() {
 
 function addArtist(name,country){
   const unqfy = getUNQfy();
-  unqfy.addArtist({
-    name: name,
-    country: country
-  });
-  saveUNQfy(unqfy);
+  try{
+    unqfy.addArtist({
+      name: name,
+      country: country
+    });
+    saveUNQfy(unqfy);
+    console.log(`Artist ${name} created succesfully!`);
+  } catch (exception){
+    console.log('INVALID ARTIST: ' + exception.message);
+  }
 }
 
 function removeArtist(artistId){
   const unqfy = getUNQfy();
-  unqfy.deleteArtist(artistId);
-  saveUNQfy(unqfy);
+  try {
+    unqfy.deleteArtist(artistId);
+    saveUNQfy(unqfy);
+    console.log(`Artist with id ${artistId} removed succesfully!`);
+  } catch (exception){
+    console.log('INVALID ARTIST: ' + exception.message);
+  }
 }
 
 function addAlbum(artistId, name, year){
   const unqfy = getUNQfy();
-  const albumData = {
-    name: name,
-    year: year
-    };
-  unqfy.addAlbum(artistId, albumData);
-  saveUNQfy(unqfy);
+  try {
+    const albumData = {
+      name: name,
+      year: year
+      };
+    unqfy.addAlbum(artistId, albumData);
+    saveUNQfy(unqfy);
+    console.log(`Album ${name} added to Artist with id ${artistId} succesfully!`);
+  } catch (exception) {
+    console.log('INVALID ALBUM: ' + exception.message);
+  }
+  
 }
 
 function removeAlbum(albumId){
   const unqfy = getUNQfy();
-  unqfy.deleteAlbum(albumId);
-  saveUNQfy(unqfy);
+  try {
+    unqfy.deleteAlbum(albumId);
+    saveUNQfy(unqfy);
+    console.log(`Album with id ${albumId} removed succesfully!`);
+  } catch (exception){
+    console.log('INVALID ALBUM: ' + exception.message);
+  }
 }
 
 function addTrack(albumId, name, duration, genresString){
   const unqfy = getUNQfy();
-  const trackData = {
-    name: name,
-    duration: duration,
-    genres: parseGenresFromString(genresString),
-  };
-  unqfy.addTrack(albumId, trackData);
-  saveUNQfy(unqfy);
+  try {
+    const trackData = {
+      name: name,
+      duration: duration,
+      genres: parseGenresFromString(genresString),
+    };
+    unqfy.addTrack(albumId, trackData);
+    saveUNQfy(unqfy);
+    console.log(`Track ${trackData.name} created succesfully!`);
+  } catch (exception) {
+    console.log('INVALID TRACK: ' + exception.message);
+  }
+
 }
 
 function removeTrack(trackId){
   const unqfy = getUNQfy();
-  unqfy.deleteTrack(trackId);
-  saveUNQfy(unqfy);
+  try {
+    unqfy.deleteTrack(trackId);
+    saveUNQfy(unqfy);
+    console.log(`Track with id ${trackId} removed succesfully!`);
+  } catch (exception) {
+    console.log('INVALID TRACK: ' + exception.message);
+  }
 }
 
 function getAllArtists(){
@@ -167,6 +199,7 @@ function createPlaylist(name, genresToInclude, maxDuration){
   const genres = parseGenresFromString(genresToInclude);
   unqfy.createPlaylist(name, genres, maxDuration);
   saveUNQfy(unqfy);
+  console.log(` Playlist ${name} created succesfully!`);
 }
 
 function getArtistByName(artistName){
@@ -194,17 +227,23 @@ function printMatches(matches){
     const myMatch = matches[match];
     printedResults = printedResults + myMatch.printInfo();
   }
+  if(printedResults === ''){
+    return 'No matches found!';
+  }
   return printedResults;
 }
 
 function printResults(results){
-  let printedResults = ' ';
+  let printedResults = '';
   for (const entityType in results){
     const myEntityList = results[entityType];
     for(const entity in myEntityList){ 
     const myEntity = myEntityList[entity];
     printedResults = printedResults + myEntity.printInfo();
     }
+  }
+  if(printedResults === ''){
+    return 'No matches found!';
   }
   return printedResults;
 }

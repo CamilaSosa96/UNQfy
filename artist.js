@@ -37,8 +37,19 @@
     }
 
     addAlbum(album,albumId){
-        this.albums[albumId] = album;
+        if(!this.albumAlreadyExists(album.name)){
+            this.albums[albumId] = album;
+        }
     }
+
+    albumAlreadyExists(albumName){
+        for (const albumId in this.albums){
+          if(this.albums[albumId].name === albumName){
+            throw new Error(`Album ${albumName} already exists for this artist!`);
+          } 
+        }
+        return false;
+      }
 
     deleteAlbumIfExists(album){
         const albumToDelete = album;

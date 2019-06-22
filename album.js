@@ -10,7 +10,7 @@ class Album{
     addTrack(id, newTrack){
         for (const trackId in this.tracks) {
             const track = this.tracks[trackId];
-            if (track.name === newTrack.name) throw Error (`Ya existe un track con el nombre ${newTrack.name} en este álbum`);
+            if (track.name === newTrack.name) throw Error (`Track with name ${newTrack.name} already exists in this album!`);
         }
         this.tracks[id] = newTrack;
     }
