@@ -108,7 +108,7 @@ app.get('/spotify_cb', (req, res) => {
         // use the access token to access the Spotify Web API
         console.log('-------------------------------------------');
         console.log('Haciendo un request de prueba con los tokens adquiridos ...');
-        request.get(options, (error, response) => {
+        request.get(options, (error, response, body) => {
           if (!error && response.statusCode === 200) {
             console.log('Request de prueba funcionó OK');
           } else {
