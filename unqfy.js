@@ -1,5 +1,5 @@
-const picklify = require('picklify'); // para cargar/guarfar unqfy
-const fs = require('fs'); // para cargar/guarfar unqfy
+const picklify = require('picklify');
+const fs = require('fs');
 const Artist = require('./artist');
 const Album = require('./album');
 const IdGenerator = require('./idGenerator');
@@ -15,6 +15,8 @@ class UNQfy {
     this.idGenerator = new IdGenerator(['artist', 'album', 'track', 'playlist']);
   }
   
+  //------------------- SYNCHRONIC METHODS -------------------//
+
   addArtist(artistData) {  
     try{
       if(!this.artistAlreadyExists(artistData.name)){
@@ -192,6 +194,16 @@ class UNQfy {
     return tracks;
   }
 
+  getArtistByName(artistName){
+    for (const artistID in this.artists){
+      const myArtist = this.getEntity('artist', artistID);
+      if(myArtist.name === artistName){
+        return myArtist;
+      }
+    }
+    throw new Error (`Artist with name ${artistName} doesn't exist`);
+  }
+
   searchByName(string) {
     const artistList = [];
     const albumList = [];
@@ -271,6 +283,8 @@ class UNQfy {
     }
   }
 
+  //------------------- SAVE/LOAD -------------------//
+
   save(filename) {
     const listenersBkp = this.listeners;
     this.listeners = [];
@@ -287,6 +301,8 @@ class UNQfy {
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }
+
+//---------------------------------------------------------//
 
 module.exports = {
   UNQfy,
