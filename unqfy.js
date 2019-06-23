@@ -6,6 +6,8 @@ const IdGenerator = require('./idGenerator');
 const IdIterator = require('./idIterator');
 const Track = require('./track');
 const Playlist = require('./playlist');
+const promisify = require('util').promisify;
+const SpotifyAPIClient = require('./spotifyAPIClient');
 
 class UNQfy {
 
@@ -15,6 +17,25 @@ class UNQfy {
     this.idGenerator = new IdGenerator(['artist', 'album', 'track', 'playlist']);
   }
   
+  //------------------- Calls to Spotify/MusicxMatch API's -------------------//
+
+  populateAlbumsForArtist(artistName, unqfy, callback){
+    const spotify = new SpotifyAPIClient();
+    const obtainAlbums = promisify(spotify.obtainAlbumNamesForArtist);
+    const promisedAlbums = obtainAlbums(artistName);
+    promisedAlbums.then((albums) => {
+      const artistID = 4;
+      for(let i=0; i < albums.length; i++){
+        const albumData = {
+          name: albums[i],
+          year: undefined
+          };
+        unqfy.addAlbum(artistID, albumData); // cambiar 4 por artistId
+      }
+      callback(null, unqfy);
+    }).catch((err) => {callback(err, null);});
+  }
+   
   //------------------- SYNCHRONIC METHODS -------------------//
 
   addArtist(artistData) {  
@@ -288,6 +309,26 @@ class UNQfy {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
+  }
+
+  static asyncLoad(filename, callback) {
+    const readFilePromise = promisify(fs.readFile);
+    const serializedData = readFilePromise(filename, {encoding: 'utf-8'});
+    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist];
+    serializedData.then((data) => {
+      callback(null, picklify.unpicklify(JSON.parse(data), classes));
+    }).catch((err) => {callback(err, null);});
+  }
+
+  asyncSave(filename, unqfy, callback){
+    const listenersBkp = unqfy.listeners;
+    unqfy.listeners = [];
+    const serializedData = picklify.picklify(unqfy);
+    unqfy.listeners = listenersBkp;
+    const writeFilePromise = promisify(fs.writeFile);
+    const savedFile = writeFilePromise(filename, JSON.stringify(serializedData, null, 2));
+    savedFile.then(() => {callback(null, null);})
+    .catch((err) => {callback(err, null);});
   }
 }
 

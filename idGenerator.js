@@ -3,9 +3,9 @@ const IdIterator = require('./idIterator');
 class IdGenerator {
 
     constructor(entities = []) {
-        const map = {}
-        entities.forEach(function(entity) {
-            map[entity] = new IdIterator()
+        const map = {};
+        entities.forEach((entity) => {
+            map[entity] = new IdIterator();
         });
         this.entities = map;
     }

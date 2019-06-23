@@ -45,7 +45,7 @@
     albumAlreadyExists(albumName){
         for (const albumId in this.albums){
           if(this.albums[albumId].name === albumName){
-            throw new Error(`Album ${albumName} already exists for this artist!`);
+            return true;
           } 
         }
         return false;
