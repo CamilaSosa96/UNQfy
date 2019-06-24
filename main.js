@@ -1,5 +1,5 @@
 const fs = require('fs');
-const unqmod = require('./unqfy');
+const unqmod = require('./UNQfy');
 const promisify = require('util').promisify;
 
 //------------------- LOAD/SAVE UNQFY -------------------//
@@ -68,6 +68,9 @@ function main() {
   if(params[0] === 'populateAlbumsForArtist'){
     populateAlbumsForArtist(params[1]);
   }
+  if(params[0] === 'getLyricsForTrack'){
+    getLyricsForTrack(params[1]);
+  }
 }
 
 //------------------- ASYNCHRONIC METHODS -------------------//
@@ -82,6 +85,20 @@ function populateAlbumsForArtist(artistName){
       const saveUNQfy = promisify(populatedUNQfy.asyncSave);
       const savedUNQfy = saveUNQfy('data.json', populatedUNQfy);
       savedUNQfy.then(() => {console.log(`Artist ${artistName} populated successfully!`);});
+    });
+  }).catch((err) => console.log('Oops! Something went wrong: ' + err));
+}
+
+function getLyricsForTrack(trackName){
+  const loadUNQfy = promisify(unqmod.UNQfy.asyncLoad);
+  const promisedUNQfy = loadUNQfy('data.json');
+  promisedUNQfy.then((unqfy) => {
+    const getLyrics = promisify(unqfy.getLyricsForTrack);
+    const unqfyWithLyrics = getLyrics(trackName, unqfy);
+    unqfyWithLyrics.then((data) => {
+      const saveUNQfy = promisify(data.unqfyData.asyncSave);
+      const savedUNQfy = saveUNQfy('data.json', data.unqfyData);
+      savedUNQfy.then(() => console.log(data.lyricsData));
     });
   }).catch((err) => console.log('Oops! Something went wrong: ' + err));
 }

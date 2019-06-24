@@ -35,6 +35,19 @@ class UNQfy {
       callback(null, unqfy);
     }).catch((err) => {callback(err, null);});
   }
+
+  getLyricsForTrack(trackName, unqfy, callback){
+    const track = unqfy.getEntity('track', 14); //mujer amante (getTrackByName en realidad.)
+    const getLyricsForTrack = promisify(track.getLyrics);  
+    const promisedLyrics = getLyricsForTrack(track);
+    promisedLyrics.then((lyrics) =>{
+        const data = {
+          unqfyData: unqfy,
+          lyricsData: lyrics
+        }
+        callback(null, data);
+    }).catch((err) => {callback(err, null);});
+  }
    
   //------------------- SYNCHRONIC METHODS -------------------//
 
