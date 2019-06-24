@@ -85,8 +85,8 @@ function populateAlbumsForArtist(artistName){
       const saveUNQfy = promisify(populatedUNQfy.asyncSave);
       const savedUNQfy = saveUNQfy('data.json', populatedUNQfy);
       savedUNQfy.then(() => {console.log(`Artist ${artistName} populated successfully!`);});
-    });
-  }).catch((err) => console.log('Oops! Something went wrong: ' + err));
+    }).catch((err) => console.log('Oops! Something went wrong: ' + err));
+  });
 }
 
 function getLyricsForTrack(trackName){
@@ -98,9 +98,9 @@ function getLyricsForTrack(trackName){
     unqfyWithLyrics.then((data) => {
       const saveUNQfy = promisify(data.unqfyData.asyncSave);
       const savedUNQfy = saveUNQfy('data.json', data.unqfyData);
-      savedUNQfy.then(() => console.log(data.lyricsData));
-    });
-  }).catch((err) => console.log('Oops! Something went wrong: ' + err));
+      savedUNQfy.then(() => console.log(`Lyrics for track ${trackName}: ${data.lyricsData}`));
+    }).catch((err) => console.log('Oops! Something went wrong: ' + err));
+  });
 }
 
 //------------------- SYNCHRONIC METHODS -------------------//

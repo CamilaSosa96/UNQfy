@@ -37,14 +37,14 @@ class UNQfy {
   }
 
   getLyricsForTrack(trackName, unqfy, callback){
-    const track = unqfy.getEntity('track', 14); //mujer amante (getTrackByName en realidad.)
+    const track = unqfy.getTrackByName(trackName);
     const getLyricsForTrack = promisify(track.getLyrics);  
     const promisedLyrics = getLyricsForTrack(track);
     promisedLyrics.then((lyrics) =>{
         const data = {
           unqfyData: unqfy,
           lyricsData: lyrics
-        }
+        };
         callback(null, data);
     }).catch((err) => {callback(err, null);});
   }
@@ -215,7 +215,23 @@ class UNQfy {
         return myArtist;
       }
     }
-    throw new Error (`Artist with name ${artistName} doesn't exist`);
+    throw new Error (`Artist with name "${artistName}" doesn't exist`);
+  }
+
+  getTrackByName(trackName) {
+    for (const artistId in this.artists) {
+      const artist = this.artists[artistId];
+      for(const albumId in artist.albums){
+        const album = artist.albums[albumId];
+        for(const trackId in album.tracks){
+          const track = album.tracks[trackId];
+          if(track.name === trackName){
+            return track;
+          }
+        }
+      }
+    }
+    throw Error(`Track with name "${trackName}" does not exist!`);
   }
 
   searchByName(string) {

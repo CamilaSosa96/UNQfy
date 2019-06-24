@@ -28,9 +28,13 @@ class Track{
             const obtainLyrics = promisify(musixmatch.obtainLyricsForTrack);
             const promisedLyrics = obtainLyrics(track.name);
             promisedLyrics.then((lyrics) => {
-                track.lyrics = lyrics;
-                callback(null, track.lyrics);
-                }).catch((err) => {callback(err, null);});
+                if(lyrics === ''){
+                    throw new Error(`'Lyrics for song "${track.name}" not available due copyright reasons.'`);
+                } else {
+                    track.lyrics = lyrics;
+                    callback(null, track.lyrics);
+                }  
+            }).catch((err) => {callback(err, null);});
         }
     }
 

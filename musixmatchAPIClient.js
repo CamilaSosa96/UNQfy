@@ -18,14 +18,9 @@ class MusixMatchAPIClient {
     
             rp.get(options).then((response) => {
                 const lyrics = response.message.body.lyrics.lyrics_body;
-                if(lyrics === ''){
-                    throw new Error(`Lyrics for song ${trackName} not available due copyright reasons.`);
-                }
-                else {
-                    callback(null, lyrics);
-                }
-            }).catch((error) => {callback(error, null);});
-        });
+                callback(null, lyrics);
+            });
+        }).catch((error) => {callback(error, null);});
     }
 
     static obtainIDForTrack(trackName, callback){
