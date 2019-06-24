@@ -234,9 +234,14 @@ function getArtistByName(artistName){
 
 function show(entity, id){
   const unqfy = getUNQfy();
-  const myEntity = unqfy.getEntity(entity, id);
+  try {
+    const myEntity = unqfy.getEntity(entity, id);
   console.log(`Results:
     ${myEntity.printInfo()}`);
+  } catch (exception) {
+    console.log('INVALID ARTIST: ' + exception.message);
+  }
+  
 }
 
 //------------------- AUXILIAR FUNCTIONS FOR PRINTING -------------------//

@@ -26,32 +26,38 @@
     },
     "__00005__": {},
     "__00006__": {
+      "id": 1,
       "name": "Rata Blanca",
       "country": "Argentina",
       "albums": "__00013__"
     },
     "__00007__": {
+      "id": 2,
       "name": "Miranda",
       "country": "Argentina",
       "albums": "__00014__"
     },
     "__00008__": {
+      "id": 3,
       "name": "Lady Gaga",
       "country": "USA",
       "albums": "__00015__"
     },
     "__00009__": {
+      "id": 4,
       "name": "Nirvana",
       "country": "USA",
       "albums": "__00016__"
     },
     "__00010__": {
+      "id": 5,
       "name": "Coldplay",
       "country": "UK",
       "albums": "__00017__"
     },
     "__00011__": {
-      "name": "Artic Monkeys",
+      "id": 6,
+      "name": "Arctic Monkeys",
       "country": "UK",
       "albums": "__00018__"
     },

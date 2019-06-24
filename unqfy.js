@@ -16,21 +16,21 @@ class UNQfy {
     this.playlists = {};
     this.idGenerator = new IdGenerator(['artist', 'album', 'track', 'playlist']);
   }
-  
+
   //------------------- Calls to Spotify/MusicxMatch API's -------------------//
 
   populateAlbumsForArtist(artistName, unqfy, callback){
+    const artistID = unqfy.getArtistByName(artistName).id;
     const spotify = new SpotifyAPIClient();
     const obtainAlbums = promisify(spotify.obtainAlbumNamesForArtist);
     const promisedAlbums = obtainAlbums(artistName);
-    promisedAlbums.then((albums) => {
-      const artistID = 4;
+    promisedAlbums.then((albums) => { 
       for(let i=0; i < albums.length; i++){
         const albumData = {
           name: albums[i],
           year: undefined
           };
-        unqfy.addAlbum(artistID, albumData); // cambiar 4 por artistId
+        unqfy.addAlbum(artistID, albumData);
       }
       callback(null, unqfy);
     }).catch((err) => {callback(err, null);});

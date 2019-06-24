@@ -1,6 +1,5 @@
 const creds = require('./spotifyCreds');
-const resolve = require('promise').resolve;
-
+const promisify = require('util').promisify;
 
 class SpotifyAPIClient{
 
@@ -8,22 +7,36 @@ class SpotifyAPIClient{
 
     obtainAlbumNamesForArtist(artistName, callback) {
         const rp = require('request-promise');
-        const promisedID = '6olE6TJLqED3rqDCT0FyPh'; // const promisedID = this.obtainArtistSpotifyID(artistName) Harcoded ID (Nirvana)
-        
+        const getId = promisify(SpotifyAPIClient.obtainArtistID);
+        const promisedID = getId(artistName);
+        promisedID.then((id) => {
+            const options = {
+                url: `https://api.spotify.com/v1/artists/${id}/albums`,
+                headers: { Authorization: 'Bearer ' + creds.access_token},
+                json: true,
+            };
+            rp.get(options).then((response) => {
+                const albums = response.items;
+                const albumNames = [];
+                for(let i=0; i < albums.length ;i++){
+                    albumNames.push(albums[i].name);
+                }
+                callback(null, albumNames);
+            }).catch((err) => {callback(err,null);});
+        });
+    }
+
+    static obtainArtistID(artistName, callback){
+        const rp = require('request-promise');
         const options = {
-            url: `https://api.spotify.com/v1/artists/${promisedID}/albums`,
+            url: `https://api.spotify.com/v1/search?q=${artistName}&type=artist`,
             headers: { Authorization: 'Bearer ' + creds.access_token},
             json: true,
         };
         rp.get(options).then((response) => {
-            const albums = response.items;
-            const albumNames = [];
-            for(let i=0; i < albums.length ;i++){
-                albumNames.push(albums[i].name);
-            }
-            callback(null, albumNames);
-        }).catch((err) => {callback(err,null);});
-    } 
+            callback(null, response.artists.items[0].id);
+        }).catch((err) => {callback(err, null);});
+    }
 }
 
 module.exports = SpotifyAPIClient;
