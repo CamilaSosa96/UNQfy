@@ -166,6 +166,14 @@ class UNQfy {
     return this.artists;
   }
 
+  getAllAlbums(){
+    const albums = [];
+    for(const artistID in this.artists){
+      albums.concat(this.artists[artistID].albums);
+    }
+    return(albums);
+  }
+
   getTracksFromAlbum(albumId){
     const tracks = [];
     const myAlbum = this.getAlbumById(albumId);

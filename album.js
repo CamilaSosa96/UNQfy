@@ -4,7 +4,7 @@ class Album{
         this.id = _id;
         this.name = _name;
         this.year = _year;
-        this.tracks = {};
+        this.tracks = [];
     }
 
     addTrack(id, newTrack){

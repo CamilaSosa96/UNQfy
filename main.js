@@ -143,7 +143,6 @@ function addAlbum(artistId, name, year){
   } catch (exception) {
     console.log('INVALID ALBUM: ' + exception.message);
   }
-  
 }
 
 function removeAlbum(albumId){
