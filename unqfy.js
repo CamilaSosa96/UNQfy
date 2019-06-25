@@ -235,19 +235,21 @@ class UNQfy {
   }
 
   searchByName(string) {
+    let search = string;
+    if(string === undefined){search = '';}
     const artistList = [];
     const albumList = [];
     const trackList = [];
     const playlistList = [];
     for (const artistId in this.artists){
       const myArtist = this.artists[artistId];
-      this.addToListIfMatches(artistList, myArtist, string);
+      this.addToListIfMatches(artistList, myArtist, search);
       for(const albumId in myArtist.albums){
         const myAlbum = myArtist.albums[albumId];
-        this.addToListIfMatches(albumList, myAlbum, string);
+        this.addToListIfMatches(albumList, myAlbum, search);
         for(const trackId in myAlbum.tracks){
           const myTrack = myAlbum.tracks[trackId];
-          this.addToListIfMatches(trackList, myTrack, string);
+          this.addToListIfMatches(trackList, myTrack, search);
         }
       }
     }

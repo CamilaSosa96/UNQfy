@@ -29,6 +29,12 @@ router.post('/api/artists', (req, res) => {
     res.status(201).send(artist);
 });
 
+router.get('api/artists', (_req, res) => {
+  const unqfy = getUNQfy();
+  const artists = unqfy.getAllArtists();
+  res.status(200).send(artists);
+});
+
 router.get('/api/artists/:id', (req, res) => {
     const unqfy = getUNQfy();
     const artist = unqfy.getArtistById(req.params.id);
@@ -48,6 +54,18 @@ router.delete('/api/artists/:id', (req, res) => {
   unqfy.deleteArtist(req.params.id);
   saveUNQfy(unqfy);
   res.status(204);
+});
+
+router.get('/api/artists', (req, res) => {
+  const unqfy = getUNQfy();
+  const artists = unqfy.searchByName(req.query.name).artists;
+  res.status(200).send(artists);
+}); 
+
+router.get('/api/artists', (req, res) => {
+  const unqfy = getUNQfy();
+  const artists = unqfy.searchByName(req.query.name).artists;
+  res.status(200).send(artists);
 });
 
 module.exports = router;
