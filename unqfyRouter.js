@@ -43,5 +43,11 @@ router.put('/api/artists/:id', (req, res) => {
     res.status(200).send(artist);
 });
 
+router.delete('/api/artists/:id', (req, res) => {
+  const unqfy = getUNQfy();
+  unqfy.deleteArtist(req.params.id);
+  saveUNQfy(unqfy);
+  res.status(204);
+});
 
 module.exports = router;

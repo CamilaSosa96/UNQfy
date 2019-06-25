@@ -264,7 +264,7 @@ class UNQfy {
     }
   
     addToListIfMatches(results, entity, string) {
-      if(entity.name.includes(string)){
+      if(entity.name.toUpperCase().includes(string.toUpperCase())){
         results.push(entity);
       }
     }
