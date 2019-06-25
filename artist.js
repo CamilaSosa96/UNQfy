@@ -2,8 +2,8 @@
     constructor(_id, _name, _country = 'No available'){
         this.id = _id;
         this.name = _name;
+        this.albums = [];
         this.country = _country;
-        this.albums = {};
     }
 
     getTracksMatchingGenres(genres) {
