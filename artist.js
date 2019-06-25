@@ -60,6 +60,11 @@
             }
         }
     }
+
+    updateInfo(name, country){
+        this.name = name;
+        this.country = country;
+    }
  }
 
  module.exports = Artist;
