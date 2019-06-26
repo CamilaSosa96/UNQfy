@@ -31,18 +31,21 @@ function getUNQfy(filename = 'data.json') {
 //--------------------- ARTISTS ---------------------//
 
 router.post('/api/artists', (req, res) => {
-    validateArtist(req.body, res);
-    const unqfy = getUNQfy();
-    try {
+    if(isInvalidArtist(req.body)){errorHandler(res, 400, 'BAD_REQUEST');} 
+    else {
+      const unqfy = getUNQfy();
+      try {
         const artist = unqfy.addArtist({
         name: req.body.name,
         country: req.body.country
-    });
-    saveUNQfy(unqfy);
-    res.status(201).send(artist);
-    } catch (exception){
-      errorHandler(res, 409, 'RESOURCE_ALREADY_EXISTS');
+      });
+      saveUNQfy(unqfy);
+      res.status(201).send(artist);
+      } catch (exception){
+        errorHandler(res, 409, 'RESOURCE_ALREADY_EXISTS');
+      }
     }
+    
 });
 
 router.get('api/artists', (_req, res) => {
@@ -93,20 +96,19 @@ router.delete('/api/artists/:id', (req, res) => {
 //--------------------- ALBUMS ----------------------//
 
 router.post('/api/albums', (req, res) => {
-  validateAlbum(req.body, res);
-  const unqfy = getUNQfy();
-  try{
-    const album = unqfy.addAlbum(req.body.artistId,{
-      name: req.body.name,
-      year: req.body.year
-    });
-    saveUNQfy(unqfy);
-    res.status(201).send(album);
-  } catch (exception) {
-    if(exception.message.includes('does not exist')){
-      errorHandler(res, 404, 'RELATED_RESOURCE_NOT_FOUND');
-    } else {
-      errorHandler(res, 409, 'RESOURCE_ALREADY_EXISTS');
+  if(isInvalidAlbum(req.body)){errorHandler(res, 400, 'BAD_REQUEST');} 
+  else {
+    const unqfy = getUNQfy();
+    try {
+      const album = unqfy.addAlbum(req.body.artistId,{
+        name: req.body.name,
+        year: req.body.year
+      });
+      saveUNQfy(unqfy);
+      res.status(201).send(album);
+    } catch (exception) {
+      if(exception.message.includes('does not exist')){errorHandler(res, 404, 'RELATED_RESOURCE_NOT_FOUND');} 
+      else {errorHandler(res, 409, 'RESOURCE_ALREADY_EXISTS');}
     }
   }
 });
@@ -169,16 +171,12 @@ function errorHandler(res, code, message) {
   });
 }
 
-function validateArtist(artistBody, res){
-  if(artistBody.name === undefined || artistBody.country === undefined){
-    errorHandler(res, 400, 'BAD_REQUEST');
-  }
+function isInvalidArtist(artistBody){
+  return artistBody.name === undefined || artistBody.country === undefined;
 }
 
-function validateAlbum(albumBody, res){
-  if(albumBody.artistId === undefined || albumBody.name === undefined || albumBody.year === undefined){
-    errorHandler(res, 400, 'BAD_REQUEST');
-  }
+function isInvalidAlbum(albumBody){
+  return albumBody.artistId === undefined || albumBody.name === undefined || albumBody.year === undefined;
 }
 
 //------------------------------------------------------------//
