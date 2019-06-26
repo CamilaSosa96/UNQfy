@@ -65,6 +65,19 @@
         this.name = name;
         this.country = country;
     }
+
+    toJSON(){
+        const myAlbums = [];
+        for(const albumsID in this.albums){
+            myAlbums.push(this.albums[albumsID]);
+        }
+        return {
+            id: this.id,
+            name: this.name,
+            albums: myAlbums,
+            country: this.country
+        };
+    }
  }
 
  module.exports = Artist;

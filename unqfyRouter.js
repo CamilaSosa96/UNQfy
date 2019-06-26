@@ -40,7 +40,7 @@ router.post('/api/artists', (req, res) => {
         country: req.body.country
       });
       saveUNQfy(unqfy);
-      res.status(201).send(artist);
+      res.status(201).send(artist.toJSON());
       } catch (exception){
         errorHandler(res, 409, 'RESOURCE_ALREADY_EXISTS');
       }
@@ -64,7 +64,7 @@ router.get('/api/artists/:id', (req, res) => {
     const unqfy = getUNQfy();
     try {
       const artist = unqfy.getArtistById(req.params.id);
-      res.status(200).send(artist);
+      res.status(200).send(artist.toJSON());
     } catch (exception){
       errorHandler(res, 404, 'RESOURCE_NOT_FOUND');
     }
@@ -76,7 +76,7 @@ router.put('/api/artists/:id', (req, res) => {
       const artist = unqfy.getArtistById(req.params.id);
       artist.updateInfo(req.body.name, req.body.country);
       saveUNQfy(unqfy);
-      res.status(200).send(artist);
+      res.status(200).send(artist.toJSON());
     } catch (exception){
       errorHandler(res, 404, 'RESOURCE_NOT_FOUND');
     }
