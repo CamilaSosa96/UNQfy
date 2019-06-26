@@ -36,6 +36,10 @@ class Album{
         return matches;
     }
 
+    updateYear(year){
+        this.year = year;
+    }
+
     printInfo(){
         return (`--------- Album ----------
     Name:   ${this.name} 
