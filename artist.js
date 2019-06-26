@@ -14,6 +14,14 @@
         }
         return matches;
     }
+
+    getAlbums(){
+        const myAlbums = [];
+        for(const albumsID in this.albums){
+            myAlbums.push(this.albums[albumsID]);
+        }
+        return myAlbums;
+    }
     
     printInfo(){
         return (`--------- Artist ---------

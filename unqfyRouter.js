@@ -48,12 +48,6 @@ router.post('/api/artists', (req, res) => {
     
 });
 
-router.get('api/artists', (_req, res) => {
-  const unqfy = getUNQfy();
-  const artists = unqfy.getAllArtists();
-  res.status(200).send(artists);
-});
-
 router.get('/api/artists', (req, res) => {
   const unqfy = getUNQfy();
   const artists = unqfy.searchByName(req.query.name).artists;
@@ -111,12 +105,6 @@ router.post('/api/albums', (req, res) => {
       else {errorHandler(res, 409, 'RESOURCE_ALREADY_EXISTS');}
     }
   }
-});
-
-router.get('/api/albums', (_req, res) => {
-  const unqfy = getUNQfy();
-  const albums = unqfy.getAllAlbums();
-  res.status(200).send(albums);
 });
 
 router.get('/api/albums', (req, res) => {
