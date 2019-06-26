@@ -87,7 +87,7 @@ router.delete('/api/artists/:id', (req, res) => {
   try {
     unqfy.deleteArtist(req.params.id);
     saveUNQfy(unqfy);
-    res.status(204);
+    res.status(204).send({});
   } catch (exception){
     errorHandler(res, 404, 'RESOURCE_NOT_FOUND');
   }
@@ -152,7 +152,7 @@ router.delete('/api/albums/:id', (req, res) => {
   try {
     unqfy.deleteAlbum(req.params.id);
     saveUNQfy(unqfy);
-    res.status(204);
+    res.status(204).send();
   } catch (exception){
     errorHandler(res, 404, 'RESOURCE_NOT_FOUND');
   }

@@ -20,17 +20,19 @@ class UNQfy {
   //------------------- Calls to Spotify/MusicxMatch API's -------------------//
 
   populateAlbumsForArtist(artistName, unqfy, callback){
-    const artistID = unqfy.getArtistByName(artistName).id;
+    const artist = unqfy.getArtistByName(artistName);
     const spotify = new SpotifyAPIClient();
     const obtainAlbums = promisify(spotify.obtainAlbumNamesForArtist);
     const promisedAlbums = obtainAlbums(artistName);
-    promisedAlbums.then((albums) => { 
-      for(let i=0; i < albums.length; i++){
+    promisedAlbums.then((albums) => {
+      const filteredAlbums = albums.filter((v,i) => albums.indexOf(v) === i);
+      unqfy.deleteAlbumsForArtist(artist);
+      for(let i=0; i < filteredAlbums.length; i++){
         const albumData = {
-          name: albums[i],
+          name: filteredAlbums[i],
           year: undefined
           };
-        unqfy.addAlbum(artistID, albumData);
+        unqfy.addAlbum(artist.id, albumData);
       }
       callback(null, unqfy);
     }).catch((err) => {callback(err, null);});
@@ -92,6 +94,13 @@ class UNQfy {
       const myArtist = this.artists[artistId];
       myArtist.deleteAlbumIfExists(myAlbum);
     } 
+  }
+
+  deleteAlbumsForArtist(artist){
+    const albums = artist.albums;
+    for(const albumID in albums) {
+      this.deleteAlbum(albumID);
+    }
   }
   
   addTrack(albumId, trackData) {
