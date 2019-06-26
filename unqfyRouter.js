@@ -146,6 +146,21 @@ router.delete('/api/albums/:id', (req, res) => {
   }
 });
 
+//------------------------- TRACKS --------------------------//
+
+router.get('/api/tracks/:trackId/lyrics', (req, res) => {
+  const unqfy = getUNQfy();
+  try {
+    const track = unqfy.getTrackById(req.params.trackId);
+    res.status().send({
+      name: track.name,
+      track: track.lyrics
+    });
+  } catch (exception){
+      errorHandler(res, 404, 'RESOURCE_NOT_FOUND');
+  }
+});
+
 //------------------ ERROR HANDLER HELPERS ------------------//
 
 router.post('*', (_req, res) => {
