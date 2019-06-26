@@ -2,8 +2,8 @@
     constructor(_id, _name, _country = 'No available'){
         this.id = _id;
         this.name = _name;
+        this.albums = [];
         this.country = _country;
-        this.albums = {};
     }
 
     getTracksMatchingGenres(genres) {
@@ -13,6 +13,14 @@
             matches = matches.concat(album.getTracksMatchingGenres(genres));
         }
         return matches;
+    }
+
+    getAlbums(){
+        const myAlbums = [];
+        for(const albumsID in this.albums){
+            myAlbums.push(this.albums[albumsID]);
+        }
+        return myAlbums;
     }
     
     printInfo(){
@@ -37,8 +45,19 @@
     }
 
     addAlbum(album,albumId){
-        this.albums[albumId] = album;
+        if(!this.albumAlreadyExists(album.name)){
+            this.albums[albumId] = album;
+        }
     }
+
+    albumAlreadyExists(albumName){
+        for (const albumId in this.albums){
+          if(this.albums[albumId].name === albumName){
+            throw new Error (`Album ${albumName} already exists!`);
+          } 
+        }
+        return false;
+      }
 
     deleteAlbumIfExists(album){
         const albumToDelete = album;
@@ -48,6 +67,24 @@
                 delete this.albums[albumId];
             }
         }
+    }
+
+    updateInfo(name, country){
+        this.name = name;
+        this.country = country;
+    }
+
+    toJSON(){
+        const myAlbums = [];
+        for(const albumsID in this.albums){
+            myAlbums.push(this.albums[albumsID]);
+        }
+        return {
+            id: this.id,
+            name: this.name,
+            albums: myAlbums,
+            country: this.country
+        };
     }
  }
 

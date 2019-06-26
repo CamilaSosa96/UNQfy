@@ -1,10 +1,13 @@
 
+const MusicxMatchAPIClient = require('./musixmatchAPIClient');
+const promisify = require('util').promisify;
 class Track{
 
     constructor(_name, _duration, _genres){
         this.name = _name;
         this.duration = _duration;
         this.genres = _genres;
+        this.lyrics = null;
     }
 
     matchesGenres(searchGenres) {
@@ -17,11 +20,30 @@ class Track{
         return false;
     }
 
+    getLyrics(track, callback){
+        if(track.lyrics !== null){
+            callback(null, track.lyrics);
+        } else {
+            const musixmatch = new MusicxMatchAPIClient();
+            const obtainLyrics = promisify(musixmatch.obtainLyricsForTrack);
+            const promisedLyrics = obtainLyrics(track.name);
+            promisedLyrics.then((lyrics) => {
+                if(lyrics === ''){
+                    throw new Error(`'Lyrics for song "${track.name}" not available due copyright reasons.'`);
+                } else {
+                    track.lyrics = lyrics;
+                    callback(null, track.lyrics);
+                }  
+            }).catch((err) => {callback(err, null);});
+        }
+    }
+
     printInfo(){
         return (`--------- Track ----------
     Name:     ${this.name} 
     Duration: ${this.duration} seconds
     Genres:   ${this.printGenresInfo()}
+    Lyrics:   ${this.printLyrics()}
     -------------------------- 
     `);
     }
@@ -35,6 +57,13 @@ class Track{
             return 'No genres available';
         }
         return genresInfo;
+    }
+
+    printLyrics(){
+        if(this.lyrics === null){
+            return 'No lyrics available';
+        }
+        return this.lyrics;
     }
 }
 

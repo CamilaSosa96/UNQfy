@@ -1,11 +1,11 @@
 
 class Playlist{
 
-    constructor(_name, _genresToInclude, _trackList, _duration){
+    constructor(_name, _genresToInclude, _trackList){
         this.name = _name;
         this.genresToInclude = _genresToInclude;
         this.tracks = _trackList;
-        this.duration = _duration;
+        this.duration = this.calculateDuration();
     }
 
     printInfo(){

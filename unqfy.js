@@ -1,11 +1,13 @@
-const picklify = require('picklify'); // para cargar/guarfar unqfy
-const fs = require('fs'); // para cargar/guarfar unqfy
+const picklify = require('picklify');
+const fs = require('fs');
 const Artist = require('./artist');
 const Album = require('./album');
 const IdGenerator = require('./idGenerator');
 const IdIterator = require('./idIterator');
 const Track = require('./track');
 const Playlist = require('./playlist');
+const promisify = require('util').promisify;
+const SpotifyAPIClient = require('./spotifyAPIClient');
 
 class UNQfy {
 
@@ -14,25 +16,55 @@ class UNQfy {
     this.playlists = {};
     this.idGenerator = new IdGenerator(['artist', 'album', 'track', 'playlist']);
   }
-  
-  addArtist(artistData) {  
-    try{
-      if(!this.artistAlreadyExists(artistData.name)){
-        const id = this.idGenerator.obtainId('artist'); 
-        const myArtist = new Artist(id, artistData.name, artistData.country);
-        this.artists[id] = myArtist;
-        console.log(`Artist ${artistData.name} created succesfully!`);
-        return myArtist;
+
+  //------------------- Calls to Spotify/MusicxMatch API's -------------------//
+
+  populateAlbumsForArtist(artistName, unqfy, callback){
+    const artist = unqfy.getArtistByName(artistName);
+    const spotify = new SpotifyAPIClient();
+    const obtainAlbums = promisify(spotify.obtainAlbumNamesForArtist);
+    const promisedAlbums = obtainAlbums(artistName);
+    promisedAlbums.then((albums) => {
+      const filteredAlbums = albums.filter((v,i) => albums.indexOf(v) === i);
+      unqfy.deleteAlbumsForArtist(artist);
+      for(let i=0; i < filteredAlbums.length; i++){
+        const albumData = {
+          name: filteredAlbums[i],
+          year: undefined
+          };
+        unqfy.addAlbum(artist.id, albumData);
       }
-    } catch (exception){ 
-      console.log('Invalid artist: ' + exception.message);
+      callback(null, unqfy);
+    }).catch((err) => {callback(err, null);});
+  }
+
+  getLyricsForTrack(trackName, unqfy, callback){
+    const track = unqfy.getTrackByName(trackName);
+    const getLyricsForTrack = promisify(track.getLyrics);  
+    const promisedLyrics = getLyricsForTrack(track);
+    promisedLyrics.then((lyrics) =>{
+        const data = {
+          unqfyData: unqfy,
+          lyricsData: lyrics
+        };
+        callback(null, data);
+    }).catch((err) => {callback(err, null);});
+  }
+   
+  //------------------- SYNCHRONIC METHODS -------------------//
+
+  addArtist(artistData) {  
+    if(!this.artistAlreadyExists(artistData.name)){
+      const id = this.idGenerator.obtainId('artist'); 
+      const myArtist = new Artist(id, artistData.name, artistData.country);
+      this.artists[id] = myArtist;
+      return myArtist;
     }
   }
 
   artistAlreadyExists(artistName) {
-    for (let i = 0; i< this.artists.length; i++){
-      const myArtist = this.artists[i];
-      if((myArtist !== undefined) && (this.artists[i].name === artistName)){
+    for (const artistId in this.artists){
+      if((this.artists[artistId].name === artistName)){
         throw new Error(`Artist ${artistName} already exists!`);
       }
     }
@@ -41,25 +73,16 @@ class UNQfy {
 
   deleteArtist(artistId) {
     const myArtist = this.getEntity('artist', artistId);
-    for(const albumId in myArtist.albums){
-      this.deleteAlbum(albumId);
-    }
+    for(const albumId in myArtist.albums) {this.deleteAlbum(albumId);}
     delete this.artists[artistId];
   }
 
   addAlbum(artistId, albumData) {   
-      try{ 
-        const result = this.getArtistById(artistId);
-        if(result !== null){
-        const albumId = this.idGenerator.obtainId('album');
-        const myAlbum = new Album(albumId, albumData.name, albumData.year);
-        this.artists[artistId].addAlbum(myAlbum,albumId);
-        console.log(`Album ${albumData.name} added to Artist with id ${artistId} succesfully!`);
-        return myAlbum;
-      }
-    } catch (exception){ 
-      console.log('Invalid artist id: ' + exception.message);
-    }  
+    const myArtist = this.getEntity('artist', artistId);
+    const albumId = this.idGenerator.obtainId('album');
+    const myAlbum = new Album(albumId, albumData.name, albumData.year);
+    myArtist.addAlbum(myAlbum,albumId);
+    return myAlbum;
   }
 
   deleteAlbum(albumId) {
@@ -72,18 +95,20 @@ class UNQfy {
       myArtist.deleteAlbumIfExists(myAlbum);
     } 
   }
+
+  deleteAlbumsForArtist(artist){
+    const albums = artist.albums;
+    for(const albumID in albums) {
+      this.deleteAlbum(albumID);
+    }
+  }
   
   addTrack(albumId, trackData) {
     const myTrack = new Track(trackData.name, trackData.duration, trackData.genres);
-    try{
-      const myAlbum = this.getAlbumById(albumId);
-      const id = this.idGenerator.obtainId('track'); 
-      myAlbum.addTrack(id, myTrack);
-      console.log(` ${trackData.name} created succesfully!`);
-      return myTrack;
-    } catch (exception){ 
-      console.log('Invalid track: ' + exception.message);
-    }
+    const myAlbum = this.getAlbumById(albumId);
+    const id = this.idGenerator.obtainId('track'); 
+    myAlbum.addTrack(id, myTrack);
+    return myTrack; 
   }
 
   deleteTrack(trackId) {
@@ -107,7 +132,7 @@ class UNQfy {
           return artist;
     }
     else{
-      throw new Error(`Artist with id ${id} doesnt exist!`);
+      throw new Error(`Artist with id ${id} does not exist!`);
     }
   }
 
@@ -119,7 +144,7 @@ class UNQfy {
         return myAlbum;
       }
     }
-    throw Error(`El album con Id ${id} no existe`);
+    throw Error(`Album with id ${id} does not exist!`);
   }
 
   getTrackById(id) {
@@ -133,7 +158,7 @@ class UNQfy {
         }
       }
     }
-    throw Error(`El track con Id ${id} no existe`);
+    throw Error(`Track with id ${id} does not exist!`);
   }
 
   getPlaylistById(id) {
@@ -142,7 +167,7 @@ class UNQfy {
       return playlist;
     }
     else{
-      throw new Error (`Playlist with Id ${id} doesnt exist!`);
+      throw new Error (`Playlist with id ${id} does not exist!`);
     }
   }
 
@@ -182,30 +207,58 @@ class UNQfy {
   getTracksMatchingArtist(artistId) {
     const tracks = [];
     const myArtist = this.artists[artistId];
-    for (const album in myArtist.albums){
-      const myAlbum = myArtist.albums[album];
-      for (const track in myAlbum.tracks){
-        const myTrack = myAlbum.tracks[track];
+    for (const albumId in myArtist.albums){
+      const myAlbum = myArtist.albums[albumId];
+      for (const trackId in myAlbum.tracks){
+        const myTrack = myAlbum.tracks[trackId];
         tracks.push(myTrack);
       }
     }
     return tracks;
   }
 
+  getArtistByName(artistName){
+    for (const artistID in this.artists){
+      const myArtist = this.getEntity('artist', artistID);
+      if(myArtist.name === artistName){
+        return myArtist;
+      }
+    }
+    throw new Error (`Artist with name "${artistName}" doesn't exist`);
+  }
+
+  getTrackByName(trackName) {
+    for (const artistId in this.artists) {
+      const artist = this.artists[artistId];
+      for(const albumId in artist.albums){
+        const album = artist.albums[albumId];
+        for(const trackId in album.tracks){
+          const track = album.tracks[trackId];
+          if(track.name === trackName){
+            return track;
+          }
+        }
+      }
+    }
+    throw Error(`Track with name "${trackName}" does not exist!`);
+  }
+
   searchByName(string) {
+    let search = string;
+    if(string === undefined){search = '';}
     const artistList = [];
     const albumList = [];
     const trackList = [];
     const playlistList = [];
-    for (const artist in this.artists){
-      const myArtist = this.artists[artist];
-      this.addToListIfMatches(artistList, myArtist, string);
-      for(const album in myArtist.albums){
-        const myAlbum = myArtist.albums[album];
-        this.addToListIfMatches(albumList, myAlbum, string);
-        for(const track in myAlbum.tracks){
-          const myTrack = myAlbum.tracks[track];
-          this.addToListIfMatches(trackList, myTrack, string);
+    for (const artistId in this.artists){
+      const myArtist = this.artists[artistId];
+      this.addToListIfMatches(artistList, myArtist, search);
+      for(const albumId in myArtist.albums){
+        const myAlbum = myArtist.albums[albumId];
+        this.addToListIfMatches(albumList, myAlbum, search);
+        for(const trackId in myAlbum.tracks){
+          const myTrack = myAlbum.tracks[trackId];
+          this.addToListIfMatches(trackList, myTrack, search);
         }
       }
     }
@@ -222,7 +275,7 @@ class UNQfy {
     }
   
     addToListIfMatches(results, entity, string) {
-      if(entity.name.includes(string)){
+      if(entity.name.toUpperCase().includes(string.toUpperCase())){
         results.push(entity);
       }
     }
@@ -231,9 +284,8 @@ class UNQfy {
     const id = this.idGenerator.obtainId('playlist');
     const tracksMatchingGenres = this.getTracksMatchingGenres(genresToInclude); 
     const trackList = this.generateRandomTrackList(tracksMatchingGenres, maxDuration);
-    const myPlaylist = new Playlist(name, genresToInclude, trackList, maxDuration );
+    const myPlaylist = new Playlist(name, genresToInclude, trackList);
     this.playlists[id] = myPlaylist;
-    console.log(` Playlist ${name} created succesfully!`);
     return myPlaylist;
   }
 
@@ -241,12 +293,12 @@ class UNQfy {
     const alltracks = tracks;
     const trackList = [];
     let duration = 0;
-    while(duration < maxDuration & alltracks.length !== 0 ){
+    while(this.existTracksToFitDuration(tracks,(maxDuration-duration)) & alltracks.length !== 0 ){
       const ranIndex = this.randomIndex(alltracks.length);
       const track = alltracks.splice(ranIndex,1).pop();
-      if ((duration + track.duration) <= maxDuration){      
+      if (track.duration <= (maxDuration-duration)){     
          trackList.push(track);
-         duration = duration + track.duration;
+         duration = duration + parseInt(track.duration);
       }    
     }
     return trackList;  
@@ -254,6 +306,16 @@ class UNQfy {
 
   randomIndex(maxIndex) {
     return Math.floor((Math.random() * maxIndex) );
+  }
+
+  existTracksToFitDuration(tracks, durationLeft){
+    for(const trackId in tracks){
+      const duration = tracks[trackId].duration;
+      if(duration !== undefined && (duration <= durationLeft)){
+        return true;
+      }
+    }
+    return false;
   }
 
   getEntity(entity, id){
@@ -271,6 +333,8 @@ class UNQfy {
     }
   }
 
+  //------------------- SAVE/LOAD -------------------//
+
   save(filename) {
     const listenersBkp = this.listeners;
     this.listeners = [];
@@ -286,7 +350,29 @@ class UNQfy {
     const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
+
+  static asyncLoad(filename, callback) {
+    const readFilePromise = promisify(fs.readFile);
+    const serializedData = readFilePromise(filename, {encoding: 'utf-8'});
+    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist];
+    serializedData.then((data) => {
+      callback(null, picklify.unpicklify(JSON.parse(data), classes));
+    }).catch((err) => {callback(err, null);});
+  }
+
+  asyncSave(filename, unqfy, callback){
+    const listenersBkp = unqfy.listeners;
+    unqfy.listeners = [];
+    const serializedData = picklify.picklify(unqfy);
+    unqfy.listeners = listenersBkp;
+    const writeFilePromise = promisify(fs.writeFile);
+    const savedFile = writeFilePromise(filename, JSON.stringify(serializedData, null, 2));
+    savedFile.then(() => {callback(null, null);})
+    .catch((err) => {callback(err, null);});
+  }
 }
+
+//---------------------------------------------------------//
 
 module.exports = {
   UNQfy,
