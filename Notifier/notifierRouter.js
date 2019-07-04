@@ -2,20 +2,38 @@ const express = require('express');
 const request = require('request');
 const router = express.Router();
 const bodyParser = require('body-parser');
+const subsAdmin = require('./SubscriptionsAdmin');
+const fs = require('fs');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+//-------------------- LOAD/SAVE --------------------//
+
+function getSubsAdmin(filename = 'subs.json') {
+    let admin = new subsAdmin();
+    if (fs.existsSync(filename)) {
+      admin = subsAdmin.load(filename);
+    }
+    return admin;
+  }
+  
+  function saveSubsAdmin(admin, filename = 'subs.json') {
+    admin.save(filename);
+  }
+
 //--------------------- ROUTER ---------------------//
 
-router.post('/api/suscribe', (req, res) => {
+router.post('/api/subscribe', (req, res) => {
     if(artistExistOnUNQfy(req.body.artistId)){
-        //se suscribe en el servicio de notificaciones, si esta suscrito no hago nada
+        const admin = getSubsAdmin();
+        admin.subscribe(req.body.artistId, req.body.email);
+        saveSubsAdmin(admin);
         res.status(200).send({});
     }
 });
 
-router.post('/api/unsuscribe', (req, res) => {
+router.post('/api/unsubscribe', (req, res) => {
     if(artistExistOnUNQfy(req.body.artistId)){
         //Si existe el mail, lo desuscribo. si no no hago nada
         res.status(200).send({});
@@ -27,16 +45,16 @@ router.post('/api/notify', (req, res) => {
     res.status(200).send({});
 });
 
-router.get('/api/suscriptions', (req, res) => {
+router.get('/api/subscriptions', (req, res) => {
     if(artistExistOnUNQfy(req.query.artistId)){
         const suscribers = []; /// retorno los mails suscritos a el
         res.status(200).send(suscribers);
     }
 });
 
-router.delete('/api/suscriptions', (req, res) =>{
+router.delete('/api/subscriptions', (req, res) =>{
     if(artistExistOnUNQfy(req.body.artistId)){
-         /// retorno los mails suscritos a el
+         /// borro los suscriptores de artistaId.
         res.status(200).send({});
     }
 });
@@ -44,10 +62,11 @@ router.delete('/api/suscriptions', (req, res) =>{
 //--------------------- AUX METHODS ---------------------//
 
 function artistExistOnUNQfy(artistId){
-    request.get(`http://127.0.0.1:5000/api/artist/${artistId}`, {json: {}}, (err) => {
-        if (err) {return false;}
-        return true;
-    });
+    return true;
+    //request.get(`http://127.0.0.1:5000/api/artist/${artistId}`, {json: {}}, (err) => {
+      //  if (err) {return false;}
+        //return true;
+    //});
 }
 
 module.exports = router;
