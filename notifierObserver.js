@@ -12,10 +12,7 @@ class NotifierObserver{
                 from: 'UNQfy <UNQfy.notifications@gmail.com>'
             }
         }, (error) => {
-            if (error) {
-                console.error(error);
-                return;
-            }
+            if (error) {return console.log(error);}
         });
     }
 
