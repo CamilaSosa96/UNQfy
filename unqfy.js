@@ -8,6 +8,7 @@ const Track = require('./track');
 const Playlist = require('./playlist');
 const promisify = require('util').promisify;
 const SpotifyAPIClient = require('./spotifyAPIClient');
+const NotifierObserver = require('./notifierObserver');
 
 class UNQfy {
 
@@ -347,14 +348,14 @@ class UNQfy {
 
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
-    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist];
+    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist, NotifierObserver];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 
   static asyncLoad(filename, callback) {
     const readFilePromise = promisify(fs.readFile);
     const serializedData = readFilePromise(filename, {encoding: 'utf-8'});
-    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist];
+    const classes = [UNQfy, Artist, IdGenerator, IdIterator, Album, Track, Playlist, NotifierObserver];
     serializedData.then((data) => {
       callback(null, picklify.unpicklify(JSON.parse(data), classes));
     }).catch((err) => {callback(err, null);});
