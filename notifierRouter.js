@@ -71,7 +71,7 @@ router.post('/api/notify', (req, res) => {
     const admin = getSubsAdmin();
     const emails = admin.getSubscribersForArtist(req.body.artistId);
     for(const address in emails){
-        sendMail(address, req.body);
+        sendMail(emails[address], req.body);
     }
     res.status(200).send({});
 });
