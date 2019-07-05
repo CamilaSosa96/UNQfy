@@ -26,7 +26,11 @@ class SubscriptionsAdmin {
 
     getSubscribersForArtist(artistId){
         const artistSubs = this.subscriptions.filter((sub) => sub.id === parseInt(artistId));
-        return artistSubs;
+        const emails = [];
+        for(let i = 0; i< artistSubs.length; i++){
+            emails.push(artistSubs[i].email);
+        }
+        return emails;
     }
 
     deleteSubscriptionsForArtist(artistId){

@@ -2,8 +2,9 @@ const express = require('express');
 const request = require('request');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const subsAdmin = require('./SubscriptionsAdmin');
+const subsAdmin = require('./subscriptionsAdmin');
 const fs = require('fs');
+const sendMail = require('./sendUNQfyMails');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -67,7 +68,11 @@ router.post('/api/unsubscribe', (req, res) => {
 });
 
 router.post('/api/notify', (req, res) => {
-    //Notifico con la info de request.
+    const admin = getSubsAdmin();
+    const emails = admin.getSubscribersForArtist(req.body.artistId);
+    for(const address in emails){
+        sendMail(address, req.body);
+    }
     res.status(200).send({});
 });
 
