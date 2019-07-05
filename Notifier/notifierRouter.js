@@ -35,7 +35,9 @@ router.post('/api/subscribe', (req, res) => {
 
 router.post('/api/unsubscribe', (req, res) => {
     if(artistExistOnUNQfy(req.body.artistId)){
-        //Si existe el mail, lo desuscribo. si no no hago nada
+        const admin = getSubsAdmin();
+        admin.unsubscribe(req.body.artistId, req.body.email);
+        saveSubsAdmin(admin);
         res.status(200).send({});
     } 
 });
@@ -47,14 +49,21 @@ router.post('/api/notify', (req, res) => {
 
 router.get('/api/subscriptions', (req, res) => {
     if(artistExistOnUNQfy(req.query.artistId)){
-        const suscribers = []; /// retorno los mails suscritos a el
-        res.status(200).send(suscribers);
+        const admin = getSubsAdmin();
+        const subs = admin.getSubscribersForArtist(req.query.artistId);
+        const response = {
+            artistId: req.query.artistId,
+            subscriptors: subs
+        };
+        res.status(200).send(response);
     }
 });
 
 router.delete('/api/subscriptions', (req, res) =>{
     if(artistExistOnUNQfy(req.body.artistId)){
-         /// borro los suscriptores de artistaId.
+        const admin = getSubsAdmin();
+        admin.deleteSubscriptionsForArtist(req.body.artistId);
+        saveSubsAdmin(admin);
         res.status(200).send({});
     }
 });

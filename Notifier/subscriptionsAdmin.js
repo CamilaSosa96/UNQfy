@@ -17,28 +17,20 @@ class SubscriptionsAdmin {
     }
 
     unsubscribe(artistId, email){
-        if(!this.artistExist(artistId)){
-            throw new Error(`Artist with id ${artistId} does not exist!`);
+        const sub = this.subscriptions.find((elem) => elem.id === artistId && elem.email === email);
+        if(sub !== undefined){
+            const index = this.subscriptions.indexOf(sub);
+            this.subscriptions.splice(index, 1);
         }
-        this.subscriptions[artistId].delete(email);
     }
 
     getSubscribersForArtist(artistId){
-        if(!this.artistExist(artistId)){
-            throw new Error(`Artist with id ${artistId} does not exist!`);
-        }
-        return Array.from(this.subscriptions[artistId]);
+        const artistSubs = this.subscriptions.filter((sub) => sub.id === parseInt(artistId));
+        return artistSubs;
     }
 
     deleteSubscriptionsForArtist(artistId){
-        if(!this.artistExist(artistId)){
-            throw new Error(`Artist with id ${artistId} does not exist!`);
-        }
-        this.subscriptions[artistId].clear();
-    }
-
-    artistExist(artistId){
-        return this.subscriptions[artistId] !== undefined;
+        this.subscriptions = this.subscriptions.filter((sub) => sub.id !== parseInt(artistId));
     }
 
     save(filename) {
