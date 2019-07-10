@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const sendLogToLoggly = require('./logglyClient');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,6 +32,7 @@ app.post('/log', (req, res) => {
         getLogs('logs.txt', (err, logs) =>{
             if(err){console.log(err.message);}
             const newLogs = generateLogsFile(logs, req.body.level, req.body.message);
+            sendLogToLoggly(req.body.level, req.body.message);
             saveLogs(newLogs, 'logs.txt', (err)=> {
                 if(err){console.log(err.message);}
                 res.status(200).send({});

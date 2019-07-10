@@ -72,7 +72,7 @@ class UNQfy {
       const id = this.idGenerator.obtainId('artist'); 
       const myArtist = new Artist(id, artistData.name, artistData.country);
       this.artists[id] = myArtist;
-      this.logActivity('ARTIST ADDED',`Artist ${artistData.name} was added`);
+      this.logActivity('info',`Artist ${artistData.name} was added`);
       return myArtist;
     }
   }
@@ -88,7 +88,7 @@ class UNQfy {
 
   deleteArtist(artistId) {
     const myArtist = this.getEntity('artist', artistId);
-    this.logActivity('ARTIST DELETED', `Artist ${myArtist.name} was removed`);
+    this.logActivity('info', `Artist ${myArtist.name} was removed`);
     for(const albumId in myArtist.albums) {this.deleteAlbum(albumId, false);}
     delete this.artists[artistId];
   }
@@ -98,7 +98,7 @@ class UNQfy {
     const albumId = this.idGenerator.obtainId('album');
     const myAlbum = new Album(albumId, albumData.name, albumData.year);
     myArtist.addAlbum(myAlbum,albumId);
-    this.logActivity('ALBUM ADDED', `Album ${albumData.name} was added`);
+    this.logActivity('info', `Album ${albumData.name} was added`);
     return myAlbum;
   }
 
@@ -112,7 +112,7 @@ class UNQfy {
       myArtist.deleteAlbumIfExists(myAlbum);
     }
     if(makeLogs){
-      this.logActivity('ALBUM DELETED', `Album ${myAlbum.name} was removed`); 
+      this.logActivity('info', `Album ${myAlbum.name} was removed`); 
     }   
   }
 
@@ -128,7 +128,7 @@ class UNQfy {
     const myAlbum = this.getAlbumById(albumId);
     const id = this.idGenerator.obtainId('track'); 
     myAlbum.addTrack(id, myTrack);
-    this.logActivity('TRACK ADDED', `Track ${trackData.name} was added`);
+    this.logActivity('info', `Track ${trackData.name} was added`);
     return myTrack; 
   }
 
@@ -146,7 +146,7 @@ class UNQfy {
       }
     }
     if(makeLogs){
-      this.logActivity('TRACK DELETED', `Track ${myTrack.name} was removed`);
+      this.logActivity('info', `Track ${myTrack.name} was removed`);
     }
   }
 
