@@ -1,5 +1,6 @@
 const picklify = require('picklify');
 const fs = require('fs');
+const request = require('request');
 const Artist = require('./artist');
 const Album = require('./album');
 const IdGenerator = require('./idGenerator');
@@ -16,9 +17,10 @@ class UNQfy {
     this.artists = {};
     this.playlists = {};
     this.idGenerator = new IdGenerator(['artist', 'album', 'track', 'playlist']);
+    this.logging = false;
   }
 
-  //------------------- Calls to Spotify/MusicxMatch API's -------------------//
+  //------------------- Calls to Services -------------------//
 
   populateAlbumsForArtist(artistName, unqfy, callback){
     const artist = unqfy.getArtistByName(artistName);
@@ -51,7 +53,18 @@ class UNQfy {
         callback(null, data);
     }).catch((err) => {callback(err, null);});
   }
-   
+  
+  logActivity(level, message){
+    if(this.logging){
+      request.post('http://127.0.0.1:5002/log', {
+        json: {
+          level: level,
+          message: message   
+        }
+      }, (error) => {if (error) {return console.log(error);}});
+    } 
+  }
+
   //------------------- SYNCHRONIC METHODS -------------------//
 
   addArtist(artistData) {  
@@ -59,6 +72,7 @@ class UNQfy {
       const id = this.idGenerator.obtainId('artist'); 
       const myArtist = new Artist(id, artistData.name, artistData.country);
       this.artists[id] = myArtist;
+      this.logActivity('ARTIST ADDED',`Artist ${artistData.name} was added`);
       return myArtist;
     }
   }
@@ -74,7 +88,8 @@ class UNQfy {
 
   deleteArtist(artistId) {
     const myArtist = this.getEntity('artist', artistId);
-    for(const albumId in myArtist.albums) {this.deleteAlbum(albumId);}
+    this.logActivity('ARTIST DELETED', `Artist ${myArtist.name} was removed`);
+    for(const albumId in myArtist.albums) {this.deleteAlbum(albumId, false);}
     delete this.artists[artistId];
   }
 
@@ -83,18 +98,22 @@ class UNQfy {
     const albumId = this.idGenerator.obtainId('album');
     const myAlbum = new Album(albumId, albumData.name, albumData.year);
     myArtist.addAlbum(myAlbum,albumId);
+    this.logActivity('ALBUM ADDED', `Album ${albumData.name} was added`);
     return myAlbum;
   }
 
-  deleteAlbum(albumId) {
+  deleteAlbum(albumId, makeLogs = true) {
     const myAlbum = this.getEntity('album', albumId);
     for(const trackId in myAlbum.tracks){
-      this.deleteTrack(trackId);
+      this.deleteTrack(trackId, false);
     }
     for(const artistId in this.artists){
       const myArtist = this.artists[artistId];
       myArtist.deleteAlbumIfExists(myAlbum);
-    } 
+    }
+    if(makeLogs){
+      this.logActivity('ALBUM DELETED', `Album ${myAlbum.name} was removed`); 
+    }   
   }
 
   deleteAlbumsForArtist(artist){
@@ -109,10 +128,11 @@ class UNQfy {
     const myAlbum = this.getAlbumById(albumId);
     const id = this.idGenerator.obtainId('track'); 
     myAlbum.addTrack(id, myTrack);
+    this.logActivity('TRACK ADDED', `Track ${trackData.name} was added`);
     return myTrack; 
   }
 
-  deleteTrack(trackId) {
+  deleteTrack(trackId, makeLogs = true) {
     const myTrack = this.getEntity('track',trackId);
     for (const playlistId in this.playlists){
       const playlist = this.playlists[playlistId];
@@ -124,6 +144,9 @@ class UNQfy {
         const myAlbum = this.getEntity('album', albumId);
         myAlbum.deleteTrackIfExists(myTrack);
       }
+    }
+    if(makeLogs){
+      this.logActivity('TRACK DELETED', `Track ${myTrack.name} was removed`);
     }
   }
 
@@ -287,6 +310,7 @@ class UNQfy {
     const trackList = this.generateRandomTrackList(tracksMatchingGenres, maxDuration);
     const myPlaylist = new Playlist(name, genresToInclude, trackList);
     this.playlists[id] = myPlaylist;
+    this.logActivity('PLAYLIST CREATED', `Playlist ${name} was created`);
     return myPlaylist;
   }
 
@@ -331,6 +355,17 @@ class UNQfy {
     }
     if(entity === 'playlist'){
       return this.getPlaylistById(id);
+    }
+  }
+
+  switchLoggingStatus(status){
+    if(status !== 'enable' && status !== 'disable'){
+      throw new Error ('Invalid parameter for -logging-');
+    }
+    if((status === 'enable' && !this.logging) || (status === 'disable' && this.logging)){
+      this.logging = !this.logging;
+    } else {
+      throw new Error ('Logging is already ' + status + 'd!');
     }
   }
 

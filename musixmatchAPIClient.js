@@ -42,7 +42,6 @@ class MusixMatchAPIClient {
             if(body.track_list[0] === undefined){
                 throw new Error(`Track with name ${trackName} not found!`);
             }
-            console.log(body.track_list);
             callback(null, body.track_list[0].track.track_id);
         }).catch((error) => {callback(error, null);});
     }
