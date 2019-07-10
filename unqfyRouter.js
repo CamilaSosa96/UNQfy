@@ -14,6 +14,10 @@ router.use((err, _req, res, next) => {
   next();
 });
 
+router.get('/status', (_req, res) => {
+  res.status(200).send({});
+});
+
 //-------------------- LOAD/SAVE --------------------//
 
 function getUNQfy(filename = 'data.json') {

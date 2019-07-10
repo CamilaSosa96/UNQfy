@@ -28,6 +28,10 @@ function saveLogs(logs, filename = 'logs.txt', callback){
 
 //------------------------------------------------------/
 
+app.get('/status', (_req, res) => {
+    res.status(200).send({});
+  });
+
 app.post('/log', (req, res) => {
         getLogs('logs.txt', (err, logs) =>{
             if(err){console.log(err.message);}
