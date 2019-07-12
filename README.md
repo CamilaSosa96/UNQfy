@@ -1,14 +1,3 @@
-**Miembros del grupo:**
-<br>
-<br>
-• _Cauhe Laura_
-<br>
-<br>
-• _Soñez Mailin_
-<br>
-<br>
-• _Sosa Camila_
-
 <a href='https://postimg.cc/hzknbnj3' target='_blank'><img src='https://i.postimg.cc/Gt2pRh1r/UNQFYVisado.jpg' border='0' alt='UNQFYVisado'/></a>
 
 # Interfaz
@@ -29,5 +18,4 @@
 | **getAllArtists**           | -                       | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
 | **search**                  | **_name_** - String     | <p align="center"> - </p>| <p align="center"> - </p>|<p align="center"> - </p>|
 | **show**                    | **_entityName_** - String| **_entityId_** - Int    | <p align="center"> - </p>|<p align="center"> - </p>|
-=======
 
