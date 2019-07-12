@@ -1,9 +1,12 @@
+const NotifierObserver = require('./notifierObserver');
+
  class Artist {
     constructor(_id, _name, _country = 'No available'){
         this.id = _id;
         this.name = _name;
         this.albums = [];
         this.country = _country;
+        this.observer = new NotifierObserver();
     }
 
     getTracksMatchingGenres(genres) {
@@ -47,6 +50,7 @@
     addAlbum(album,albumId){
         if(!this.albumAlreadyExists(album.name)){
             this.albums[albumId] = album;
+            this.observer.notifyAlbum(this.id, this.name, album.name);
         }
     }
 

@@ -14,6 +14,10 @@ router.use((err, _req, res, next) => {
   next();
 });
 
+router.get('/status', (_req, res) => {
+  res.status(200).send({});
+});
+
 //-------------------- LOAD/SAVE --------------------//
 
 function getUNQfy(filename = 'data.json') {
@@ -152,9 +156,15 @@ router.get('/api/tracks/:trackId/lyrics', (req, res) => {
   const unqfy = getUNQfy();
   try {
     const track = unqfy.getTrackById(req.params.trackId);
-    res.status().send({
-      name: track.name,
-      track: track.lyrics
+    track.getLyrics(track, (err, lyrics) => {
+      if(err){
+        errorHandler(res, 404, 'RESOURCE_NOT_FOUND');
+        return 1;
+      }
+      res.status().send({
+        name: track.name,
+        track: lyrics
+      });
     });
   } catch (exception){
       errorHandler(res, 404, 'RESOURCE_NOT_FOUND');

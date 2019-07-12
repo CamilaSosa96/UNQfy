@@ -71,6 +71,9 @@ function main() {
   if(params[0] === 'getLyricsForTrack'){
     getLyricsForTrack(params[1]);
   }
+  if(params[0] === 'logging'){
+    switchLogging(params[1]);
+  }
 }
 
 //------------------- ASYNCHRONIC METHODS -------------------//
@@ -258,6 +261,17 @@ function show(entity, id){
     console.log('INVALID ARTIST: ' + exception.message);
   }
   
+}
+
+function switchLogging(status){
+  const unqfy = getUNQfy();
+  try {
+    unqfy.switchLoggingStatus(status);
+    saveUNQfy(unqfy);
+    console.log('Logging ' + status + 'd ' + 'successfully!');
+  } catch (exception){
+    console.log('INVALID OPERATION: ' + exception.message);
+  }
 }
 
 //------------------- AUXILIAR FUNCTIONS FOR PRINTING -------------------//
